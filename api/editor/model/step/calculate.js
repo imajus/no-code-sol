@@ -12,10 +12,6 @@ import {
 export const calculateStepModel = createStepModel(
   'calculate',
   'task',
-  /**
-   *
-   * @param {CalculateStep} step
-   */
   (step) => {
     step.category('Values');
     step.description(

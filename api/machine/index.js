@@ -10,9 +10,8 @@ const builder = createWorkflowMachineBuilder(activitySet);
  *
  * @param {MyDefinition} definition
  * @param {VariableState} variableValues
- * @param {onStateChanged} onStateChanged
- * @param {onLog} onLog
- * @returns {Promise<WorkflowMachineSnapshot<GlobalState>>}
+ * @param {(path: string[]) => void} onStateChanged
+ * @param {(message: string) => void} onLog
  */
 export function executeMachine(
   definition,

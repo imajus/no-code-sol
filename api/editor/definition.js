@@ -8,9 +8,6 @@ import {
   loopStepModel,
 } from './model';
 
-/**
- * @type MyDefinition
- */
 export const definitionModel = createDefinitionModel((model) => {
   model.valueTypes(['string', 'number']);
   model.root(rootModel);

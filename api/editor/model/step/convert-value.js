@@ -6,10 +6,6 @@ import {
 export const convertValueStepModel = createStepModel(
   'convertValue',
   'task',
-  /**
-   *
-   * @param {ConvertValueStep} step
-   */
   (step) => {
     step.category('Values');
     step.description('Convert value from one variable to another.');

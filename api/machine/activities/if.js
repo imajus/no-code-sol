@@ -33,12 +33,12 @@ function compare(a, b, operator) {
 }
 
 export const ifActivity = createForkActivity('if', {
-  init() {},
+  init: () => ({}),
   /**
    *
    * @param {IfStep} step
    * @param {GlobalState} state
-   * @returns
+   * @returns {Promise<BranchNameResult>}
    */
   async handler(step, { $dynamics }) {
     const a = $dynamics.readAny(step.properties.a);

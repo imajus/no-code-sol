@@ -32,11 +32,13 @@ export class Playground {
    */
   inputVariables;
   /**
+   * @private
    * @readonly
    * @type {RawInputData}
    */
   inputData;
   /**
+   * @private
    * @readonly
    * @type {RawInputData}
    */
@@ -47,26 +49,29 @@ export class Playground {
    */
   outputFields = {};
   /**
-   * @readonly
-   * @type {SimpleEvent<void>}
-   */
-  onInputChanged = new SimpleEvent();
-  /**
+   * @private
    * @readonly
    * @type {HTMLElement}
    */
   logs;
-
   /**
+   * @private
    * @readonly
    * @type {HTMLElement}
    */
   inputList;
   /**
+   * @private
    * @readonly
    * @type {HTMLElement}
    */
   outputList;
+  /**
+   * @public
+   * @readonly
+   * @type {SimpleEvent<void>}
+   */
+  onInputChanged = new SimpleEvent();
 
   constructor(logs, inputData, inputList, outputList) {
     this.logs = logs;
@@ -113,8 +118,7 @@ export class Playground {
       /**
        *
        * @param {VariableState} values
-       * @param {MyDefinition} definition
-       * @returns
+       * @param {VariableDefinition} definition
        */
       (values, definition) => {
         const input = this.inputData[definition.name] || '';

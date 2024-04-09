@@ -3,10 +3,9 @@ import { editorProvider } from './provider';
 
 /**
  *
- * @param {Placeholder} placeholder
+ * @param {HTMLElement} placeholder
  * @param {DefinitionWalker} definitionWalker
  * @param {AppState} startState
- * @returns
  */
 export function createDesigner(placeholder, definitionWalker, startState) {
   return Designer.create(placeholder, startState.definition, {
