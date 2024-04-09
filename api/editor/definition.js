@@ -5,6 +5,7 @@ import {
   calculateStepModel,
   convertValueStepModel,
   ifStepModel,
+  loopStepModel,
 } from './model';
 
 /**
@@ -18,5 +19,6 @@ export const definitionModel = createDefinitionModel((model) => {
     calculateStepModel,
     convertValueStepModel,
     ifStepModel,
+    loopStepModel,
   ]);
 });

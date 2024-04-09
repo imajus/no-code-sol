@@ -1,7 +1,8 @@
-// import { Definition, Step, BranchedStep } from 'sequential-workflow-model';
+// import { Definition, Step, BranchedStep, SequentialStep } from 'sequential-workflow-model';
 // import {
 // Dynamic,
 // NullableVariable,
+// NullableVariableDefinition,
 //   ValueType,
 //   VariableDefinition,
 //   VariableDefinitions,
@@ -21,6 +22,10 @@ export interface GlobalState {
   $variables: VariablesService;
   $dynamics: DynamicsService;
   $logger: LoggerService;
+}
+
+interface LoopActivityState {
+  indexVariableName: string;
 }
 
 export interface MyDefinition extends Definition {
@@ -56,6 +61,19 @@ export interface IfStep extends BranchedStep {
     a: Dynamic<number | string | boolean | NullableVariable>;
     operator: string;
     b: Dynamic<number | string | boolean | NullableVariable>;
+  };
+}
+
+export interface LoopStep extends SequentialStep {
+  type: 'loop';
+  componentType: 'container';
+  properties: {
+    from: Dynamic<number | NullableVariable>;
+    to: Dynamic<number | NullableVariable>;
+    increment: Dynamic<number | NullableVariable>;
+    operator: string;
+    indexVariable: NullableVariableDefinition;
+    variables: VariableDefinitions;
   };
 }
 
