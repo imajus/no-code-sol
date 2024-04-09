@@ -1,44 +1,42 @@
-import {
-  // WorkflowMachineSnapshot,
-  createWorkflowMachineBuilder,
-} from 'sequential-workflow-machine';
-// import { GlobalState } from './global-state';
+import { createWorkflowMachineBuilder } from 'sequential-workflow-machine';
 import { activitySet } from './activities';
-// import { MyDefinition } from '../model/definition-model';
-// import {
-//   VariableState,
-//   VariablesService,
-//   createVariableState,
-// } from './services/variables';
-// import { DynamicsService } from './services/dynamics';
+import { VariablesService, createVariableState } from './services/variables';
+import { DynamicsService } from './services/dynamics';
 import { LoggerService } from './services/logger';
 
-const builder = createWorkflowMachineBuilder(/* <GlobalState> */ activitySet);
+const builder = createWorkflowMachineBuilder(activitySet);
 
+/**
+ *
+ * @param {MyDefinition} definition
+ * @param {VariableState} variableValues
+ * @param {onStateChanged} onStateChanged
+ * @param {onLog} onLog
+ * @returns {Promise<WorkflowMachineSnapshot<GlobalState>>}
+ */
 export function executeMachine(
-  definition /* : MyDefinition */,
-  variableValues /* : VariableState */,
-  onStateChanged /* : (path : string[]) => void */,
-  onLog /* : (message: string ) => void */,
-) /* : Promise<WorkflowMachineSnapshot<GlobalState>> */ {
+  definition,
+  variableValues,
+  onStateChanged,
+  onLog,
+) {
   const machine = builder.build(definition);
   const interpreter = machine.create({
     init: () => {
-      // const variablesState = createVariableState(variableValues);
-      // const $variables = new VariablesService(variablesState);
-      // const $dynamics = new DynamicsService($variables);
+      const variablesState = createVariableState(variableValues);
+      const $variables = new VariablesService(variablesState);
+      const $dynamics = new DynamicsService($variables);
       const $logger = new LoggerService();
       $logger.onLog.subscribe(onLog);
       return {
         startTime: new Date(),
-        // variablesState,
-        // $variables,
-        // $dynamics,
+        variablesState,
+        $variables,
+        $dynamics,
         $logger,
       };
     },
   });
-
   return new Promise((resolve, reject) => {
     try {
       interpreter.onChange(() => {

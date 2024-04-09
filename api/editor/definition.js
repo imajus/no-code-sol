@@ -1,5 +1,10 @@
 import { createDefinitionModel } from 'sequential-workflow-editor-model';
-import { rootModel, logStepModel } from './model';
+import {
+  rootModel,
+  logStepModel,
+  calculateStepModel,
+  convertValueStepModel,
+} from './model';
 
 /**
  * @type MyDefinition
@@ -7,5 +12,5 @@ import { rootModel, logStepModel } from './model';
 export const definitionModel = createDefinitionModel((model) => {
   model.valueTypes(['string', 'number']);
   model.root(rootModel);
-  model.steps([logStepModel]);
+  model.steps([logStepModel, calculateStepModel, convertValueStepModel]);
 });
