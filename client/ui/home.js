@@ -1,13 +1,6 @@
-import {
-  createStepModel,
-  createStringValueModel,
-  createRootModel,
-  createVariableDefinitionsValueModel,
-  createDefinitionModel,
-} from 'sequential-workflow-editor-model';
-import { EditorProvider } from 'sequential-workflow-editor';
-import { Uid, DefinitionWalker, Designer } from 'sequential-workflow-designer';
+import { DefinitionWalker, Designer } from 'sequential-workflow-designer';
 import { TemplateController } from 'meteor/space:template-controller';
+import { editorProvider } from '/api/editor';
 import { Playground } from '/api/playground';
 import { executeMachine } from '/api/machine';
 import { AppStorage } from '/api/storage';
@@ -16,50 +9,6 @@ import 'sequential-workflow-designer/css/designer-light.css';
 import 'sequential-workflow-editor/css/editor.css';
 import './home.html';
 import './home.css';
-
-/**
- * @type LogStep
- */
-const logStepModel = createStepModel('log', 'task', (step) => {
-  step
-    .property('message')
-    .value(
-      createStringValueModel({
-        minLength: 1,
-      }),
-    )
-    .label('Message to log');
-});
-
-/**
- * @type MyDefinition
- */
-const rootModel = createRootModel((root) => {
-  root.property('inputs').value(createVariableDefinitionsValueModel({}));
-  root
-    .property('outputs')
-    .hint('Variables returned from the workflow.')
-    .value(createVariableDefinitionsValueModel({}))
-    .label('Outputs');
-  // root.sequence().value(
-  //   createSequenceValueModel({
-  //     sequence: [],
-  //   }),
-  // );
-});
-
-/**
- * @type MyDefinition
- */
-const definitionModel = createDefinitionModel((model) => {
-  model.valueTypes(['string', 'number']);
-  model.root(rootModel);
-  model.steps([logStepModel]);
-});
-
-const editorProvider = EditorProvider.create(definitionModel, {
-  uidGenerator: Uid.next,
-});
 
 TemplateController('Home', {
   onRendered() {

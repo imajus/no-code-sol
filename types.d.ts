@@ -5,6 +5,15 @@
 //   VariableDefinition,
 //   VariableDefinitions,
 // } from 'sequential-workflow-editor-model';
+import { CalculateStep } from '../../model/calculate-step-model';
+
+export interface GlobalState {
+  startTime: Date;
+  variablesState: VariableState;
+  $variables: VariablesService;
+  $dynamics: DynamicsService;
+  $logger: LoggerService;
+}
 
 export interface MyDefinition extends Definition {
   properties: {
