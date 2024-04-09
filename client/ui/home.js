@@ -1,6 +1,6 @@
-import { DefinitionWalker, Designer } from 'sequential-workflow-designer';
+import { DefinitionWalker } from 'sequential-workflow-designer';
 import { TemplateController } from 'meteor/space:template-controller';
-import { editorProvider } from '/api/editor';
+import { editorProvider, createDesigner } from '/api/editor';
 import { Playground } from '/api/playground';
 import { executeMachine } from '/api/machine';
 import { AppStorage } from '/api/storage';
@@ -13,33 +13,19 @@ import './home.css';
 TemplateController('Home', {
   onRendered() {
     const execute = this.execute.bind(this);
+    const startState = AppStorage.tryGet() ?? {
+      inputData: {},
+      definition: editorProvider.activateDefinition(),
+    };
     this.definitionWalker = new DefinitionWalker();
-    this.designer = Designer.create(
+    this.designer = createDesigner(
       this.find('#designer'),
-      editorProvider.activateDefinition(),
-      {
-        controlBar: true,
-        editors: {
-          rootEditorProvider: editorProvider.createRootEditorProvider(),
-          stepEditorProvider: editorProvider.createStepEditorProvider(),
-        },
-        validator: {
-          step: editorProvider.createStepValidator(),
-          root: editorProvider.createRootValidator(),
-        },
-        steps: {
-          iconUrlProvider: () => '/assets/icon-task.svg',
-        },
-        toolbox: {
-          groups: editorProvider.getToolboxGroups(),
-          labelProvider: editorProvider.createStepLabelProvider(),
-        },
-        definitionWalker: this.definitionWalker,
-      },
+      this.definitionWalker,
+      startState,
     );
     this.playground = new Playground(
       this.find('#logs'),
-      {},
+      startState.inputData,
       this.find('#inputs'),
       this.find('#outputs'),
     );

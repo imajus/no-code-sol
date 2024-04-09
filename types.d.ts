@@ -10,6 +10,11 @@
 //   WorkflowMachineSnapshot,
 // } from 'sequential-workflow-machine';
 
+export interface AppState {
+  definition: MyDefinition;
+  inputData: RawInputData;
+}
+
 export interface GlobalState {
   startTime: Date;
   variablesState: VariableState;
