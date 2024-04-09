@@ -4,6 +4,7 @@ import {
   logStepModel,
   calculateStepModel,
   convertValueStepModel,
+  ifStepModel,
 } from './model';
 
 /**
@@ -12,5 +13,10 @@ import {
 export const definitionModel = createDefinitionModel((model) => {
   model.valueTypes(['string', 'number']);
   model.root(rootModel);
-  model.steps([logStepModel, calculateStepModel, convertValueStepModel]);
+  model.steps([
+    logStepModel,
+    calculateStepModel,
+    convertValueStepModel,
+    ifStepModel,
+  ]);
 });

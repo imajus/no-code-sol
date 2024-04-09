@@ -1,4 +1,5 @@
+export { rootModel } from './root';
 export { logStepModel } from './step/log';
 export { calculateStepModel } from './step/calculate';
 export { convertValueStepModel } from './step/convert-value';
-export { rootModel } from './root';
+export { ifStepModel } from './step/if';

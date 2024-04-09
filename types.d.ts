@@ -1,4 +1,4 @@
-// import { Definition, Step } from 'sequential-workflow-model';
+// import { Definition, Step, BranchedStep } from 'sequential-workflow-model';
 // import {
 // Dynamic,
 // NullableVariable,
@@ -46,6 +46,16 @@ export interface CalculateStep extends Step {
     operator: string;
     b: Dynamic<number | NullableVariable>;
     result: NullableVariable;
+  };
+}
+
+export interface IfStep extends BranchedStep {
+  type: 'if';
+  componentType: 'switch';
+  properties: {
+    a: Dynamic<number | string | boolean | NullableVariable>;
+    operator: string;
+    b: Dynamic<number | string | boolean | NullableVariable>;
   };
 }
 
