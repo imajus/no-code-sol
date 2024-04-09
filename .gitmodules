@@ -1,0 +1,6 @@
+[submodule "packages/useraccounts-core"]
+	path = packages/useraccounts-core
+	url = https://github.com/imajus/useraccounts-core.git
+[submodule "packages/useraccounts-flow-routing-extra"]
+	path = packages/useraccounts-flow-routing-extra
+	url = https://github.com/imajus/useraccounts-flow-routing-extra.git

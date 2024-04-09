@@ -1,0 +1,3 @@
+{
+  "extends": "@majus/eslint-config-meteor"
+}

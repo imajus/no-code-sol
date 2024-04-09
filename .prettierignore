@@ -1,0 +1,7 @@
+*.html
+.DS_Store
+node_modules
+package-lock.json
+/.*
+/public
+/private

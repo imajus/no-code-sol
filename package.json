@@ -1,0 +1,45 @@
+{
+  "name": "meteor-app-scaffold",
+  "author": {
+    "name": "Denis Perov",
+    "email": "denis.perov@gmail.com"
+  },
+  "private": true,
+  "scripts": {
+    "start": "meteor run --settings=settings.json --exclude-archs=web.browser.legacy,web.cordova --raw-logs",
+    "deploy": "meteor deploy myapp.meteorapp.com --settings=.env/settings.json --free --mongo --cache-build",
+    "settings": "meteor npx json-fmt .env/settings.json",
+    "preinstall": "git submodule update --init"
+  },
+  "dependencies": {
+    "@babel/runtime": "^7.24.1",
+    "@majus/eslint-config-meteor": "0.0.4",
+    "bootstrap": "^4.6.2",
+    "jquery": "^3.7.1",
+    "lodash": "^4.17.21",
+    "meteor-node-stubs": "^1.2.5",
+    "node-abort-controller": "^3.1.1",
+    "node-fetch": "^3.3.2",
+    "popper.js": "^1.16.1",
+    "simpl-schema": "^3.4.1"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.23.2",
+    "@babel/eslint-parser": "^7.22.15",
+    "eslint": "^8.53.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-import-resolver-meteor": "^0.4.0",
+    "eslint-plugin-import": "^2.25.4",
+    "eslint-plugin-jsx-a11y": "^6.8.0",
+    "eslint-plugin-meteor": "^7.3.0",
+    "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-react-hooks": "^4.6.0",
+    "json-fmt": "^1.1.2"
+  },
+  "meteor": {
+    "mainModule": {
+      "client": "client/main.js",
+      "server": "server/main.js"
+    }
+  }
+}
