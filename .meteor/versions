@@ -48,7 +48,6 @@ jagi:astronomy@2.7.3
 jagi:astronomy-timestamp-behavior@2.0.0
 jquery@3.0.0
 launch-screen@1.3.0
-littledata:synced-cron@1.5.1
 livedata@1.0.18
 logging@1.3.2
 majus:files-gridfs@0.0.1

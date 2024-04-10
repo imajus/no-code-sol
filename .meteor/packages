@@ -34,7 +34,6 @@ fortawesome:fontawesome
 fetch
 check
 imajus:string-helpers
-littledata:synced-cron
 jagi:astronomy
 jagi:astronomy-timestamp-behavior
 
