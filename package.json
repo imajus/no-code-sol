@@ -7,7 +7,7 @@
   "private": true,
   "scripts": {
     "start": "meteor run --settings=settings.json --exclude-archs=web.browser.legacy,web.cordova --raw-logs",
-    "deploy": "meteor deploy myapp.meteorapp.com --settings=.env/settings.json --free --mongo --cache-build",
+    "deploy": "meteor deploy nocodesol.meteorapp.com --settings=.env/settings.json --free --cache-build",
     "settings": "meteor npx json-fmt .env/settings.json",
     "preinstall": "git submodule update --init"
   },
