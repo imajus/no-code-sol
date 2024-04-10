@@ -4,6 +4,7 @@ import {
 } from 'sequential-workflow-editor-model';
 
 export const logStepModel = createStepModel('log', 'task', (step) => {
+  step.category('Debugging');
   step
     .property('message')
     .value(

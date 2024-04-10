@@ -93,5 +93,11 @@ interface ConvertValueStep extends Step {
   };
 }
 
+interface FunctionsStep extends BranchedStep {
+  type: 'functions';
+  componentType: 'switch';
+  properties: {};
+}
+
 type RawInputData = Record<string, string>;
 type VariableState = Record<string, unknown>;

@@ -1,5 +1,6 @@
 import { Designer } from 'sequential-workflow-designer';
 import { editorProvider } from './provider';
+import { functionsStepEditorProvider } from './model/step/functions';
 
 /**
  *
@@ -12,7 +13,15 @@ export function createDesigner(placeholder, definitionWalker, startState) {
     controlBar: true,
     editors: {
       rootEditorProvider: editorProvider.createRootEditorProvider(),
-      stepEditorProvider: editorProvider.createStepEditorProvider(),
+      stepEditorProvider(step, context, definition) {
+        const fallback = editorProvider.createStepEditorProvider();
+        switch (step.type) {
+          case 'functions':
+            return functionsStepEditorProvider(step, context);
+          default:
+            return fallback(step, context, definition);
+        }
+      },
     },
     validator: {
       step: editorProvider.createStepValidator(),
