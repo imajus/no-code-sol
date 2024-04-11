@@ -25,11 +25,6 @@ interface MyDefinition extends Definition {
   };
 }
 
-interface AppState {
-  definition: MyDefinition;
-  inputData: RawInputData;
-}
-
 interface GlobalState {
   startTime: Date;
   variablesState: VariableState;

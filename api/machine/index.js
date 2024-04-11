@@ -9,20 +9,15 @@ const builder = createWorkflowMachineBuilder(activitySet);
 /**
  *
  * @param {MyDefinition} definition
- * @param {VariableState} variableValues
+ * @param {VariableState} state
  * @param {(path: string[]) => void} onStateChanged
  * @param {(message: string) => void} onLog
  */
-export function executeMachine(
-  definition,
-  variableValues,
-  onStateChanged,
-  onLog,
-) {
+export function executeMachine(definition, state, onStateChanged, onLog) {
   const machine = builder.build(definition);
   const interpreter = machine.create({
     init: () => {
-      const variablesState = createVariableState(variableValues);
+      const variablesState = createVariableState(state);
       const $variables = new VariablesService(variablesState);
       const $dynamics = new DynamicsService($variables);
       const $logger = new LoggerService();
