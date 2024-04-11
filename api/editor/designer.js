@@ -6,20 +6,20 @@ import { functionsStepEditorProvider } from './model/step/functions';
  *
  * @param {HTMLElement} placeholder
  * @param {DefinitionWalker} definitionWalker
- * @param {AppState} startState
+ * @param {MyDefinition} definition
  */
-export function createDesigner(placeholder, definitionWalker, startState) {
-  return Designer.create(placeholder, startState.definition, {
+export function createDesigner(placeholder, definitionWalker, definition) {
+  return Designer.create(placeholder, definition, {
     controlBar: true,
     editors: {
       rootEditorProvider: editorProvider.createRootEditorProvider(),
-      stepEditorProvider(step, context, definition) {
+      stepEditorProvider(step, context, defo) {
         const fallback = editorProvider.createStepEditorProvider();
         switch (step.type) {
           case 'functions':
             return functionsStepEditorProvider(step, context);
           default:
-            return fallback(step, context, definition);
+            return fallback(step, context, defo);
         }
       },
     },
