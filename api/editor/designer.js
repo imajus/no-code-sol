@@ -1,40 +1,68 @@
 import { Designer } from 'sequential-workflow-designer';
-import { editorProvider } from './provider';
-import { functionsStepEditorProvider } from './model/step/functions';
+import {
+  logStep,
+  calculateStep,
+  convertValueStep,
+  ifStep,
+  loopStep,
+  functionsStep,
+  functionsStepEditorProvider,
+  defaultStepEditorProvider,
+} from './model';
 
 /**
  *
  * @param {HTMLElement} placeholder
- * @param {DefinitionWalker} definitionWalker
+ * @param {DefinitionWalker} walker
  * @param {MyDefinition} definition
  */
-export function createDesigner(placeholder, definitionWalker, definition) {
+export function createDesigner(placeholder, walker, definition) {
   return Designer.create(placeholder, definition, {
     controlBar: true,
     editors: {
-      rootEditorProvider: editorProvider.createRootEditorProvider(),
-      stepEditorProvider(step, context, defo) {
-        const fallback = editorProvider.createStepEditorProvider();
+      rootEditorProvider() {
+        const root = document.createElement('div');
+        root.innerText = 'Please select any step.';
+        return root;
+      },
+      stepEditorProvider(step, context) {
         switch (step.type) {
           case 'functions':
             return functionsStepEditorProvider(step, context);
           default:
-            return fallback(step, context, defo);
+            return defaultStepEditorProvider(step, context);
         }
       },
     },
     validator: {
-      step: editorProvider.createStepValidator(),
-      root: editorProvider.createRootValidator(),
+      step(step) {
+        return Object.keys(step.properties).every((name) => {
+          const value = step.properties[name];
+          return value === 0 || value === '' || Boolean(value);
+        });
+      },
+      root: () => true,
     },
     steps: {
       iconUrlProvider: () => '/assets/icon-task.svg',
     },
     toolbox: {
-      groups: editorProvider.getToolboxGroups(),
-      labelProvider: editorProvider.createStepLabelProvider(),
+      groups: [
+        {
+          name: 'Structure',
+          steps: [functionsStep],
+        },
+        {
+          name: 'Logic',
+          steps: [ifStep, loopStep, calculateStep, convertValueStep],
+        },
+        {
+          name: 'Debugging',
+          steps: [logStep],
+        },
+      ],
     },
     undoStackSize: 10,
-    definitionWalker,
+    definitionWalker: walker,
   });
 }
