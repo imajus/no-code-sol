@@ -3,16 +3,6 @@ type Step = import('sequential-workflow-model').Step;
 type BranchedStep = import('sequential-workflow-model').BranchedStep;
 type SequentialStep = import('sequential-workflow-model').SequentialStep;
 type DefinitionWalker = import('sequential-workflow-model').DefinitionWalker;
-type Dynamic = import('sequential-workflow-model').Dynamic;
-type NullableVariable = import('sequential-workflow-model').NullableVariable;
-type ValueType = import('sequential-workflow-model').ValueType;
-
-type NullableVariableDefinition =
-  import('sequential-workflow-editor-model').NullableVariableDefinition;
-type VariableDefinition =
-  import('sequential-workflow-editor-model').VariableDefinition;
-type VariableDefinitions =
-  import('sequential-workflow-editor-model').VariableDefinitions;
 
 type WorkflowMachineSnapshot =
   import('sequential-workflow-machine').WorkflowMachineSnapshot;
@@ -20,16 +10,18 @@ type BranchNameResult = import('sequential-workflow-machine').BranchNameResult;
 
 interface MyDefinition extends Definition {
   properties: {
-    inputs: VariableDefinitions;
-    outputs: VariableDefinitions;
+    // inputs: VariableDefinitions;
+    // outputs: VariableDefinitions;
   };
 }
 
+type VariableState = Record<string, unknown>;
+
 interface GlobalState {
   startTime: Date;
-  variablesState: VariableState;
-  $variables: VariablesService;
-  $dynamics: DynamicsService;
+  state: VariableState;
+  // $variables: VariablesService;
+  // $dynamics: DynamicsService;
   $logger: LoggerService;
 }
 
@@ -49,9 +41,9 @@ interface CalculateStep extends Step {
   type: 'calculate';
   componentType: 'task';
   properties: {
-    a: Dynamic<number | NullableVariable>;
+    left: any;
     operator: string;
-    b: Dynamic<number | NullableVariable>;
+    right: any;
     result: NullableVariable;
   };
 }
@@ -60,9 +52,9 @@ interface IfStep extends BranchedStep {
   type: 'if';
   componentType: 'switch';
   properties: {
-    a: Dynamic<number | string | boolean | NullableVariable>;
+    a: any;
     operator: string;
-    b: Dynamic<number | string | boolean | NullableVariable>;
+    b: any;
   };
 }
 
@@ -70,12 +62,12 @@ interface LoopStep extends SequentialStep {
   type: 'loop';
   componentType: 'container';
   properties: {
-    from: Dynamic<number | NullableVariable>;
-    to: Dynamic<number | NullableVariable>;
-    increment: Dynamic<number | NullableVariable>;
+    from: number;
+    to: number;
+    increment: number;
     operator: string;
-    indexVariable: NullableVariableDefinition;
-    variables: VariableDefinitions;
+    indexVariable: string;
+    variables: string;
   };
 }
 
@@ -83,8 +75,8 @@ interface ConvertValueStep extends Step {
   type: 'convertValue';
   componentType: 'task';
   properties: {
-    source: NullableAnyVariable;
-    target: NullableAnyVariable;
+    source: string;
+    target: string;
   };
 }
 
@@ -95,4 +87,3 @@ interface FunctionsStep extends BranchedStep {
 }
 
 type RawInputData = Record<string, string>;
-type VariableState = Record<string, unknown>;

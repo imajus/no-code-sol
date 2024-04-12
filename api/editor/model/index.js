@@ -1,7 +1,8 @@
-export { rootModel } from './root';
-export { logStepModel } from './step/log';
-export { calculateStepModel } from './step/calculate';
-export { convertValueStepModel } from './step/convert-value';
-export { ifStepModel } from './step/if';
-export { loopStepModel } from './step/loop';
-export { functionsStepModel } from './step/functions';
+// export { rootModel } from './root';
+export { logStep } from './step/log';
+export { calculateStep } from './step/calculate';
+export { convertValueStep } from './step/convert-value';
+export { ifStep } from './step/if';
+export { loopStep } from './step/loop';
+export { functionsStep, functionsStepEditorProvider } from './step/functions';
+export { defaultStepEditorProvider } from './provider';

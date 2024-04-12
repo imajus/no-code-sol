@@ -1,29 +1,13 @@
-import {
-  createStepModel,
-  createNullableAnyVariableValueModel,
-} from 'sequential-workflow-editor-model';
+import { Random } from 'meteor/random';
 
-export const convertValueStepModel = createStepModel(
-  'convertValue',
-  'task',
-  (step) => {
-    step.category('Values');
-    step.description('Convert value from one variable to another.');
-    step
-      .property('source')
-      .value(
-        createNullableAnyVariableValueModel({
-          isRequired: true,
-        }),
-      )
-      .label('Source variable');
-    step
-      .property('target')
-      .value(
-        createNullableAnyVariableValueModel({
-          isRequired: true,
-        }),
-      )
-      .label('Target variable');
+/** @type {ConvertValueStep} */
+export const convertValueStep = {
+  id: Random.id(),
+  type: 'convertValue',
+  componentType: 'task',
+  name: 'Convert value',
+  properties: {
+    source: 'string',
+    target: 'string',
   },
-);
+};

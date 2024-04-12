@@ -1,16 +1,12 @@
-import {
-  createStepModel,
-  createStringValueModel,
-} from 'sequential-workflow-editor-model';
+import { Random } from 'meteor/random';
 
-export const logStepModel = createStepModel('log', 'task', (step) => {
-  step.category('Debugging');
-  step
-    .property('message')
-    .value(
-      createStringValueModel({
-        minLength: 1,
-      }),
-    )
-    .label('Message to log');
-});
+/** @type {LogStep} */
+export const logStep = {
+  id: Random.id(),
+  type: 'log',
+  componentType: 'task',
+  name: 'Log',
+  properties: {
+    message: '',
+  },
+};

@@ -1,10 +1,9 @@
 import { DefinitionWalker } from 'sequential-workflow-designer';
 import { TemplateController } from 'meteor/space:template-controller';
-import { editorProvider, createDesigner } from '/api/editor';
+import { createDesigner } from '/api/editor';
 import { AppStorage } from '/api/storage';
 import 'sequential-workflow-designer/css/designer.css';
 import 'sequential-workflow-designer/css/designer-light.css';
-import 'sequential-workflow-editor/css/editor.css';
 import './editor/components/playground';
 import './home.html';
 import './home.css';
@@ -20,7 +19,10 @@ TemplateController('Home', {
   },
   onRendered() {
     const storage = new AppStorage('definition');
-    const state = storage.get() ?? editorProvider.activateDefinition();
+    const state = storage.get() ?? {
+      properties: {},
+      sequence: [],
+    };
     const designer = createDesigner(
       this.find('#designer'),
       this.state.walker,

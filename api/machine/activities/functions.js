@@ -8,7 +8,7 @@ export const functionsActivity = createForkActivity('functions', {
    * @param {GlobalState} state
    * @returns {Promise<BranchNameResult>}
    */
-  async handler(step, { $variables }) {
-    return branchName($variables.state.function);
+  async handler(step, { state }) {
+    return branchName(state.func);
   },
 });

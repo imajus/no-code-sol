@@ -4,12 +4,15 @@
     <p class="explanation">Voluptas aut perspiciatis quas mollitia tenetur officia ut ipsam. Id est qui nam natus
       dolorum quo repellat eaque. Sit vel recusandae dolorem. Voluptatem fugiat similique vero. Eos modi cumque maxime.
       Maiores quibusdam dolorum autem ex.</p>
-    <h4>Inputs</h4>
+    <h4>Function</h4>
+    <div class="form-group">
+      <input type="text" value="{{state.func}}" class="form-control" data-target="func" />
+    </div>
+    <h4>Arguments</h4>
     {{#each input in state.inputs}}
       <div class="form-group">
-        <label for="input-{{@index}}">{{input.name}}</label>
-        <input id="input-{{@index}}" type="text" value="{{input.value}}" class="form-control" data-action="changeInput"
-          data-index="{{@index}}" />
+        <label>{{input.name}}</label>
+        <input type="text" value="{{input.value}}" class="form-control" data-target="args" data-index="{{@index}}" />
       </div>
     {{/each}}
     <h4>Console</h4>
@@ -18,16 +21,10 @@
         <li class="text-{{log.brand}}">{{log.message}}</li>
       {{/each}}
     </ul>
-    <h4>Outputs</h4>
-    {{#each output in state.outputs}}
-      <div class="form-group">
-        <label>{{output.name}}</label>
-        <input type="text" value="{{output.value}}" class="form-control" readonly />
-      </div>
-    {{/each}}
+    <h4>Result</h4>
     {{!-- <h4>Result</h4>
     <div class="form-group">
-      <input type="text" value="{{state.output.value}}" class="form-control" readonly />
+      <input type="text" value="{{state.result}}" class="form-control" readonly />
     </div> --}}
   </div>
 </template>

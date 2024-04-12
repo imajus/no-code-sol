@@ -22,8 +22,6 @@
     "node-fetch": "^3.3.2",
     "popper.js": "^1.16.1",
     "sequential-workflow-designer": "^0.19.3",
-    "sequential-workflow-editor": "^0.11.3",
-    "sequential-workflow-editor-model": "^0.11.3",
     "sequential-workflow-machine": "^0.5.2",
     "sequential-workflow-model": "^0.2.0",
     "simpl-schema": "^3.4.1"

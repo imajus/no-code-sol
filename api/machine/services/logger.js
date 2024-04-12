@@ -1,9 +1,13 @@
-import { SimpleEvent } from 'sequential-workflow-editor-model';
+// import { SimpleEvent } from 'sequential-workflow-editor-model';
 
 export class LoggerService {
-  onLog = new SimpleEvent();
+  onLog; // = new SimpleEvent();
+
+  constructor(onLog) {
+    this.onLog = onLog;
+  }
 
   log(message) {
-    this.onLog.forward(message);
+    this.onLog(message);
   }
 }

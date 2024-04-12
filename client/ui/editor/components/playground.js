@@ -1,4 +1,3 @@
-import { WellKnownValueType } from 'sequential-workflow-editor-model';
 // import SimpleSchema from 'simpl-schema';
 import { TemplateController } from 'meteor/space:template-controller';
 import { executeMachine } from '/api/machine';
@@ -8,14 +7,14 @@ import './playground.html';
 /**
  *
  * @param {string} text
- * @param {ValueType} type
+ * @param {string} type
  * @returns {*}
  */
 function convertInputValue(text, type) {
   switch (type) {
-    case WellKnownValueType.string:
+    case 'string':
       return (text ?? '').trim();
-    case WellKnownValueType.number: {
+    case 'number': {
       const value = parseFloat(text);
       if (Number.isNaN(value)) {
         throw new Error(`Invalid input number value: ${text || '<empty>'}`);
@@ -39,38 +38,45 @@ TemplateController('EditorPlayground', {
   //   },
   // }),
   state: {
-    inputs: null,
-    outputs: null,
+    func: null,
+    args: null,
     logs: [],
   },
   onCreated() {},
   onRendered() {
     const { designer } = this.data;
     const execute = this.execute.bind(this);
-    const storage = new AppStorage('inputs');
+    const storage = new AppStorage('input');
+    const { func, args } = storage.get() ?? {};
     designer.onReady.subscribe(execute);
     designer.onDefinitionChanged.subscribe(execute);
-    this.state.inputs = storage.get();
+    this.state.func = func ?? 'function1';
+    this.state.args = args ?? [];
     this.autorun(() => {
-      const { inputs } = this.state;
-      storage.set(inputs);
+      const { func, args } = this.state;
+      storage.set({ func, args });
     });
     execute();
   },
   helpers: {},
   events: {
-    'change [data-action=changeInput]'(e) {
+    'change [data-target=func]'(e) {
+      const { value } = e.currentTarget;
+      this.state.func = convertInputValue(value, 'string');
+      this.execute();
+    },
+    'change [data-target=args]'(e) {
       const {
         dataset: { index },
         value,
       } = e.currentTarget;
-      const { inputs } = this.state;
-      this.state.inputs = inputs.map((input, i) => {
+      const { args } = this.state;
+      this.state.args = args.map((arg, i) => {
         // eslint-disable-next-line eqeqeq
         if (i == index) {
-          return { ...input, value: convertInputValue(value, input.type) };
+          return { ...arg, value: convertInputValue(value, arg.type) };
         }
-        return input;
+        return arg;
       });
       this.execute();
     },
@@ -92,75 +98,33 @@ TemplateController('EditorPlayground', {
       return statePath.join('/');
     },
     log(message, brand = 'normal') {
-      this.state.logs.push({ message, brand });
-    },
-    initInputVariables(definition) {
-      const { inputs } = this.state;
-      this.state.inputs = definition.properties.inputs.variables.map(
-        ({ name, type }) => {
-          const { value } = inputs.find((input) => input.name === name) ?? {};
-          return { name, type, value };
-        },
-      );
-    },
-    readInputVariableState(definition) {
-      const { inputs } = this.state;
-      const { variables } = definition.properties.inputs;
-      if (!variables) {
-        throw new Error('Input variables not set');
-      }
-      return variables.reduce(
-        /**
-         *
-         * @param {VariableState} values
-         * @param {VariableDefinition} definition
-         */
-        (values, { name, type }) => {
-          const { value } = inputs.find((input) => input.name === name);
-          return {
-            ...values,
-            [name]: convertInputValue(value, type),
-          };
-        },
-        {},
-      );
-    },
-    writeOutputVariableState(definition, snapshot) {
-      const { $variables } = snapshot.globalState;
-      this.state.outputs = definition.properties.outputs.variables.map(
-        ({ name }) => {
-          if ($variables.isSet(name)) {
-            const value = $variables.read(name);
-            return { name, value };
-          }
-          return { name };
-        },
-      );
+      const { logs } = this.state;
+      this.state.logs = [...logs, { message, brand }];
     },
     async execute() {
       const { designer } = this.data;
+      const { func, args } = this.state;
       const definition = designer.getDefinition();
       this.state.logs = [];
-      this.initInputVariables(definition);
       try {
         if (!designer.isValid()) {
-          throw new Error('Definition is not valid');
+          this.log('Definition is not valid', 'warning');
+          return;
         }
-        const state = this.readInputVariableState(definition);
+        const state = { func, args };
         const snapshot = await executeMachine(
           definition,
           state,
-          (statePath) => {
-            const name = this.readStateName(statePath, definition);
+          (path) => {
+            const name = this.readStateName(path, definition);
             this.log(`state: ${name}`, 'muted');
           },
           (log) => this.log(log),
         );
         if (snapshot.unhandledError) {
-          const { message } = snapshot.unhandledError;
-          throw new Error(message);
+          const { cause } = snapshot.unhandledError;
+          throw cause;
         }
-        this.writeOutputVariableState(definition, snapshot);
       } catch (err) {
         console.error(err);
         this.log(`FAILED: ${err.message}`, 'danger');

@@ -1,7 +1,4 @@
-import {
-  createBranchesValueModel,
-  createBranchedStepModel,
-} from 'sequential-workflow-editor-model';
+import { Random } from 'meteor/random';
 import { Template } from 'meteor/templating';
 import { Blaze } from 'meteor/blaze';
 import '/client/ui/editor/components/functions';
@@ -31,19 +28,14 @@ export function functionsStepEditorProvider(step, context) {
   return root;
 }
 
-export const functionsStepModel = createBranchedStepModel(
-  'functions',
-  'switch',
-  (step) => {
-    step.category('Structure');
-    step.description('Define functions of Smart Contract.');
-    step.branches().value(
-      createBranchesValueModel({
-        dynamic: true,
-        branches: {
-          'function1': [],
-        },
-      }),
-    );
+/** @type {FunctionsStep} */
+export const functionsStep = {
+  id: Random.id(),
+  type: 'functions',
+  componentType: 'switch',
+  name: 'Functions',
+  properties: {},
+  branches: {
+    'function1': [],
   },
-);
+};
