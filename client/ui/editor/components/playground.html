@@ -4,15 +4,22 @@
     <p class="explanation">Voluptas aut perspiciatis quas mollitia tenetur officia ut ipsam. Id est qui nam natus
       dolorum quo repellat eaque. Sit vel recusandae dolorem. Voluptatem fugiat similique vero. Eos modi cumque maxime.
       Maiores quibusdam dolorum autem ex.</p>
+    <h4>State</h4>
+    {{#each item in state.state}}
+      <div class="form-group">
+        <label>{{item._id}}:</label>
+        <input type="text" value="{{item.value}}" class="form-control" data-target="state" data-id="{{item._id}}" />
+      </div>
+    {{/each}}
     <h4>Function</h4>
     <div class="form-group">
       <input type="text" value="{{state.func}}" class="form-control" data-target="func" />
     </div>
     <h4>Arguments</h4>
-    {{#each input in state.inputs}}
+    {{#each arg in state.args}}
       <div class="form-group">
-        <label>{{input.name}}</label>
-        <input type="text" value="{{input.value}}" class="form-control" data-target="args" data-index="{{@index}}" />
+        <label>{{arg.name}}:</label>
+        <input type="text" value="{{arg.value}}" class="form-control" data-target="args" data-index="{{@index}}" />
       </div>
     {{/each}}
     <h4>Console</h4>
@@ -21,9 +28,11 @@
         <li class="text-{{log.brand}}">{{log.message}}</li>
       {{/each}}
     </ul>
-    <h4>Result</h4>
-    <div class="form-group">
-      <input type="text" value="{{state.result}}" class="form-control" readonly />
-    </div>
+    {{#each item in outputState}}
+      <div class="form-group">
+        <label>{{item.name}}:</label>
+        <input type="text" value="{{item.value}}" class="form-control" readonly />
+      </div>
+    {{/each}}
   </div>
 </template>

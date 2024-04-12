@@ -31,7 +31,7 @@ export function executeMachine(definition, state, onStateChanged, onLog) {
   });
   return new Promise((resolve, reject) => {
     try {
-      interpreter.onChange(() => {
+      interpreter.onChange((context, history) => {
         const snapshot = interpreter.getSnapshot();
         onStateChanged(snapshot.getStatePath());
       });

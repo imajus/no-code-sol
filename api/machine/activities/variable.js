@@ -9,6 +9,8 @@ export const variableActivity = createAtomActivityFromHandler(
    */
   async (step, { $variables }) => {
     const { name, defaultValue } = step.properties;
-    $variables.set(name, defaultValue);
+    if (!$variables.isSet(name)) {
+      $variables.set(name, defaultValue);
+    }
   },
 );

@@ -1,4 +1,5 @@
 // import SimpleSchema from 'simpl-schema';
+import { Tracker } from 'meteor/tracker';
 import { TemplateController } from 'meteor/space:template-controller';
 import { executeMachine } from '/api/machine';
 import { AppStorage } from '/api/storage';
@@ -11,19 +12,20 @@ import './playground.html';
  * @returns {*}
  */
 function convertInputValue(text, type) {
-  switch (type) {
-    case 'string':
-      return (text ?? '').trim();
-    case 'number': {
-      const value = parseFloat(text);
-      if (Number.isNaN(value)) {
-        throw new Error(`Invalid input number value: ${text || '<empty>'}`);
-      }
-      return value;
-    }
-    default:
-      throw new Error(`Unknown variable type: ${type}`);
-  }
+  return text;
+  // switch (type) {
+  //   case 'string':
+  //     return (text ?? '').trim();
+  //   case 'number': {
+  //     const value = parseFloat(text);
+  //     if (Number.isNaN(value)) {
+  //       throw new Error(`Invalid input number value: ${text || '<empty>'}`);
+  //     }
+  //     return value;
+  //   }
+  //   default:
+  //     throw new Error(`Unknown variable type: ${type}`);
+  // }
 }
 
 TemplateController('EditorPlayground', {
@@ -38,33 +40,63 @@ TemplateController('EditorPlayground', {
   //   },
   // }),
   state: {
+    state: null,
     func: null,
     args: null,
-    result: null,
+    output: null,
     logs: [],
   },
   onCreated() {},
   onRendered() {
     const { designer } = this.data;
-    const execute = this.execute.bind(this);
+    const definition = designer.getDefinition();
     const storage = new AppStorage('input');
-    const { func, args } = storage.get() ?? {};
-    designer.onReady.subscribe(execute);
-    designer.onDefinitionChanged.subscribe(execute);
+    const { state, func, args } = storage.get() ?? {};
+    this.state.state = state ?? [];
     this.state.func = func ?? 'function1';
     this.state.args = args ?? [];
+    this.initState(definition);
+    this.initArgs(definition);
     this.autorun(() => {
-      const { func, args } = this.state;
-      storage.set({ func, args });
+      const { state, func, args } = this.state;
+      storage.set({ state, func, args });
+      Tracker.nonreactive(() => this.execute());
     });
-    execute();
+    designer.onDefinitionChanged.subscribe(() => {
+      const definition = designer.getDefinition();
+      this.initState(definition);
+      this.initArgs(definition);
+    });
   },
-  helpers: {},
+  helpers: {
+    outputState() {
+      const { output } = this.state;
+      if (output) {
+        return Object.entries(output).map(([name, value]) => ({
+          name,
+          value,
+        }));
+      }
+      return null;
+    },
+  },
   events: {
+    'change [data-target=state]'(e) {
+      const {
+        dataset: { id },
+        value,
+      } = e.currentTarget;
+      const { state } = this.state;
+      this.state.state = state.map((item) => {
+        if (item._id === id) {
+          return { ...item, value: convertInputValue(value, item.type) };
+        }
+        return item;
+      });
+    },
     'change [data-target=func]'(e) {
       const { value } = e.currentTarget;
       this.state.func = convertInputValue(value, 'string');
-      this.execute();
     },
     'change [data-target=args]'(e) {
       const {
@@ -79,7 +111,6 @@ TemplateController('EditorPlayground', {
         }
         return arg;
       });
-      this.execute();
     },
   },
   private: {
@@ -102,17 +133,45 @@ TemplateController('EditorPlayground', {
       const { logs } = this.state;
       this.state.logs = [...logs, { message, brand }];
     },
+    resetLogs() {
+      this.state.logs = [];
+    },
+    initState(definition) {
+      const { state } = this.state;
+      const variables = definition.sequence
+        .filter((step) => step.type === 'variable')
+        .map((step) => step.properties);
+      this.state.state = variables.map(({ name, type }) => ({
+        _id: name,
+        value: state.find(({ _id }) => _id === name)?.value,
+        type,
+      }));
+    },
+    initArgs(definition) {
+      //TODO
+    },
+    serializeState() {
+      const { state } = this.state;
+      return state.reduce(
+        (acc, { _id, value }) => ({ ...acc, [_id]: value }),
+        {},
+      );
+    },
     async execute() {
       const { designer } = this.data;
       const { func, args } = this.state;
-      const definition = designer.getDefinition();
-      this.state.logs = [];
+      this.resetLogs();
       try {
+        const definition = designer.getDefinition();
         if (!designer.isValid()) {
           this.log('Definition is not valid', 'warning');
           return;
         }
-        const state = { func, args };
+        const state = {
+          ...this.serializeState(),
+          func,
+          args,
+        };
         const snapshot = await executeMachine(
           definition,
           state,
@@ -126,7 +185,7 @@ TemplateController('EditorPlayground', {
           const { cause } = snapshot.unhandledError;
           throw cause;
         }
-        this.state.result = state.result;
+        this.state.output = state;
       } catch (err) {
         console.error(err);
         this.log(`FAILED: ${err.message}`, 'danger');
