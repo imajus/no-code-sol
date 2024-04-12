@@ -8,6 +8,7 @@ import {
   functionsStep,
   functionsStepEditorProvider,
   defaultStepEditorProvider,
+  variableStep,
 } from './model';
 
 /**
@@ -52,7 +53,7 @@ export function createDesigner(placeholder, walker, definition) {
       groups: [
         {
           name: 'Structure',
-          steps: [functionsStep],
+          steps: [functionsStep, variableStep],
         },
         {
           name: 'Logic',
@@ -64,7 +65,8 @@ export function createDesigner(placeholder, walker, definition) {
         },
       ],
     },
-    undoStackSize: 10,
+    //FIXME: This causes error when deleting a step
+    // undoStackSize: 10,
     definitionWalker: walker,
   });
 }

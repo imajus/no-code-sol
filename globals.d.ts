@@ -9,11 +9,10 @@ type WorkflowMachineSnapshot =
 type BranchNameResult = import('sequential-workflow-machine').BranchNameResult;
 
 interface MyDefinition extends Definition {
-  properties: {
-    // inputs: VariableDefinitions;
-    // outputs: VariableDefinitions;
-  };
+  properties: {};
 }
+
+///// State
 
 type VariableState = Record<string, unknown>;
 
@@ -28,6 +27,8 @@ interface GlobalState {
 interface LoopActivityState {
   indexVariableName: string;
 }
+
+///// Steps
 
 interface LogStep extends Step {
   type: 'log';
@@ -85,5 +86,17 @@ interface FunctionsStep extends BranchedStep {
   componentType: 'switch';
   properties: {};
 }
+
+interface VariableStep extends Step {
+  type: 'variable';
+  componentType: 'task';
+  properties: {
+    name: string;
+    type: string;
+    defaultValue: string;
+  };
+}
+
+///// Miscellaneous
 
 type RawInputData = Record<string, string>;

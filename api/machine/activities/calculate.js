@@ -1,4 +1,5 @@
 import { createAtomActivityFromHandler } from 'sequential-workflow-machine';
+import { format } from '../formatter';
 
 /**
  *
@@ -31,13 +32,13 @@ export const calculateActivity = createAtomActivityFromHandler(
    * @param {CalculateStep} step
    * @param {GlobalState} state
    */
-  async (step, { $variables, $dynamics }) => {
-    if (!step.properties.result) {
+  async (step, { state }) => {
+    const { left, right, operator, result } = step.properties;
+    if (!result) {
       throw new Error('Result variable is not defined');
     }
-    const a = $dynamics.readNumber(step.properties.a);
-    const b = $dynamics.readNumber(step.properties.b);
-    const result = calculate(a, b, step.properties.operator);
-    $variables.set(step.properties.result.name, result);
+    const a = Number.parseInt(format(left, state), 10);
+    const b = Number.parseInt(format(right, state), 10);
+    state[result] = calculate(a, b, operator);
   },
 );

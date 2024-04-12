@@ -5,6 +5,7 @@ import { convertValueActivity } from './activities/convert-value';
 import { ifActivity } from './activities/if';
 import { loopActivity } from './activities/loop';
 import { functionsActivity } from './activities/functions';
+import { variableActivity } from './activities/variable';
 
 export const activitySet = createActivitySet([
   logActivity,
@@ -13,4 +14,5 @@ export const activitySet = createActivitySet([
   ifActivity,
   loopActivity,
   functionsActivity,
+  variableActivity,
 ]);
