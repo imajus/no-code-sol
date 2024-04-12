@@ -40,6 +40,7 @@ TemplateController('EditorPlayground', {
   state: {
     func: null,
     args: null,
+    result: null,
     logs: [],
   },
   onCreated() {},
@@ -125,6 +126,7 @@ TemplateController('EditorPlayground', {
           const { cause } = snapshot.unhandledError;
           throw cause;
         }
+        this.state.result = state.result;
       } catch (err) {
         console.error(err);
         this.log(`FAILED: ${err.message}`, 'danger');

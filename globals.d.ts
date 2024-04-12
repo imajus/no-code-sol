@@ -107,6 +107,14 @@ interface VariableStep extends Step {
   };
 }
 
+interface ReturnStep extends Step {
+  type: 'return';
+  componentType: 'task';
+  properties: {
+    result: string;
+  };
+}
+
 ///// Miscellaneous
 
 type RawInputData = Record<string, string>;

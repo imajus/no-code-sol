@@ -2,13 +2,13 @@ import { Designer } from 'sequential-workflow-designer';
 import {
   logStep,
   calculateStep,
-  // convertValueStep,
   ifStep,
   loopStep,
   functionsStep,
   functionsStepEditorProvider,
   defaultStepEditorProvider,
   variableStep,
+  returnStep,
 } from './model';
 
 /**
@@ -57,7 +57,7 @@ export function createDesigner(placeholder, walker, definition) {
         },
         {
           name: 'Logic',
-          steps: [ifStep, loopStep, calculateStep /* convertValueStep */],
+          steps: [ifStep, loopStep, calculateStep, returnStep],
         },
         {
           name: 'Debugging',
