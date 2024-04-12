@@ -12,7 +12,7 @@ import './playground.html';
  * @returns {*}
  */
 function convertInputValue(text, type) {
-  return text;
+  return text || undefined;
   // switch (type) {
   //   case 'string':
   //     return (text ?? '').trim();
@@ -46,21 +46,23 @@ TemplateController('EditorPlayground', {
     output: null,
     logs: [],
   },
-  onCreated() {},
-  onRendered() {
+  onCreated() {
     const { designer } = this.data;
     const definition = designer.getDefinition();
     const storage = new AppStorage('input');
-    const { state, func, args } = storage.get() ?? {};
-    this.state.state = state ?? [];
-    this.state.func = func ?? 'function1';
-    this.state.args = args ?? [];
+    this.unpack(storage);
     this.initState(definition);
     this.initArgs(definition);
     this.autorun(() => {
-      const { state, func, args } = this.state;
-      storage.set({ state, func, args });
-      Tracker.nonreactive(() => this.execute());
+      const { state, func } = this.state;
+      Tracker.nonreactive(() => this.initArgs(definition));
+      this.autorun(() => {
+        const { args } = this.state;
+        storage.set({ state, func, args });
+        if (func) {
+          Tracker.nonreactive(() => this.execute());
+        }
+      });
     });
     designer.onDefinitionChanged.subscribe(() => {
       const definition = designer.getDefinition();
@@ -114,6 +116,12 @@ TemplateController('EditorPlayground', {
     },
   },
   private: {
+    unpack(storage) {
+      const { state, func, args } = storage.get() ?? {};
+      this.state.state = state ?? [];
+      this.state.func = func ?? 'function1';
+      this.state.args = args ?? [];
+    },
     readStateName(statePath, definition) {
       const { walker } = this.data;
       const path = [...statePath].reverse();
@@ -148,7 +156,23 @@ TemplateController('EditorPlayground', {
       }));
     },
     initArgs(definition) {
-      //TODO
+      const { func, args } = this.state;
+      this.state.args = [];
+      if (func) {
+        const step = definition.sequence.find(
+          (step) => step.type === 'functions',
+        );
+        const sequence = step.branches[func];
+        if (sequence) {
+          this.state.args = sequence
+            .filter((step) => step.type === 'argument')
+            .map(({ properties: { name, type } }) => ({
+              _id: name,
+              value: args.find(({ _id }) => _id === name)?.value,
+              type,
+            }));
+        }
+      }
     },
     serializeState() {
       const { state } = this.state;
@@ -169,8 +193,11 @@ TemplateController('EditorPlayground', {
         }
         const state = {
           ...this.serializeState(),
+          ...args.reduce(
+            (acc, { _id, value }) => ({ ...acc, [_id]: value }),
+            {},
+          ),
           func,
-          args,
         };
         const snapshot = await executeMachine(
           definition,

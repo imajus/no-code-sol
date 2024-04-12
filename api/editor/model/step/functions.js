@@ -1,8 +1,14 @@
 import { Random } from 'meteor/random';
 import { Template } from 'meteor/templating';
 import { Blaze } from 'meteor/blaze';
-import '/client/ui/editor/components/functions';
+import '/client/ui/editor/components/step/functions';
 
+/**
+ *
+ * @param {FunctionsStep} step
+ * @param {*} context
+ * @returns
+ */
 export function functionsStepEditorProvider(step, context) {
   const root = document.createElement('div');
   Blaze.renderWithData(

@@ -9,6 +9,7 @@ import {
   defaultStepEditorProvider,
   variableStep,
   returnStep,
+  argumentStep,
 } from './model';
 
 /**
@@ -53,7 +54,7 @@ export function createDesigner(placeholder, walker, definition) {
       groups: [
         {
           name: 'Structure',
-          steps: [functionsStep, variableStep],
+          steps: [functionsStep, variableStep, argumentStep],
         },
         {
           name: 'Logic',

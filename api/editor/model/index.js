@@ -8,3 +8,4 @@ export { functionsStep, functionsStepEditorProvider } from './step/functions';
 export { variableStep } from './step/variable';
 export { returnStep } from './step/return';
 export { defaultStepEditorProvider } from './provider';
+export { argumentStep } from './step/argument';

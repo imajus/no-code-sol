@@ -107,6 +107,16 @@ interface VariableStep extends Step {
   };
 }
 
+interface ArgumentStep extends Step {
+  type: 'argument';
+  componentType: 'task';
+  properties: {
+    name: string;
+    type: string;
+    defaultValue: string;
+  };
+}
+
 interface ReturnStep extends Step {
   type: 'return';
   componentType: 'task';

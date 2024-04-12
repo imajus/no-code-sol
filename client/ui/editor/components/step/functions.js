@@ -13,10 +13,12 @@ TemplateController('EditorFunctionsStep', {
     branches: [],
   },
   onCreated() {
-    this.state.branches = this.props.branches;
+    const { branches, args } = this.props;
+    this.state.branches = branches;
   },
+
   events: {
-    'change [data-action=changeName]'(e) {
+    'change [data-target=func]'(e) {
       const input = e.currentTarget;
       const { branch } = input.dataset;
       const { branches } = this.state;
@@ -30,13 +32,13 @@ TemplateController('EditorFunctionsStep', {
       );
       this.props.onRename(branch, value);
     },
-    'click [data-action=deleteFunction]'(e) {
+    'click [data-action=deleteFunc]'(e) {
       const { branch } = e.currentTarget.dataset;
       const { branches } = this.state;
       this.state.branches = branches.filter((name) => name !== branch);
       this.props.onDelete(branch);
     },
-    'click [data-action=addFunction]'() {
+    'click [data-action=addFunc]'() {
       const name = window.prompt('Enter function name');
       if (name) {
         const { branches } = this.state;

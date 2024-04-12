@@ -6,6 +6,7 @@ import { loopActivity } from './activities/loop';
 import { functionsActivity } from './activities/functions';
 import { variableActivity } from './activities/variable';
 import { returnActivity } from './activities/return';
+import { argumentActivity } from './activities/argument';
 
 export const activitySet = createActivitySet([
   logActivity,
@@ -15,4 +16,5 @@ export const activitySet = createActivitySet([
   functionsActivity,
   variableActivity,
   returnActivity,
+  argumentActivity,
 ]);
