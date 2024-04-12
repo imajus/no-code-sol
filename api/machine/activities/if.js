@@ -40,10 +40,11 @@ export const ifActivity = createForkActivity('if', {
    * @param {GlobalState} state
    * @returns {Promise<BranchNameResult>}
    */
-  async handler(step, { $dynamics }) {
-    const a = $dynamics.readAny(step.properties.a);
-    const b = $dynamics.readAny(step.properties.b);
-    const result = compare(a, b, step.properties.operator);
+  async handler(step, { $variables }) {
+    const { left, right, operator } = step.properties;
+    const a = $variables.resolve(left);
+    const b = $variables.resolve(right);
+    const result = compare(a, b, operator);
     return branchName(result ? 'true' : 'false');
   },
 });

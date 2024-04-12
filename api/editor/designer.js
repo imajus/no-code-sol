@@ -2,7 +2,7 @@ import { Designer } from 'sequential-workflow-designer';
 import {
   logStep,
   calculateStep,
-  convertValueStep,
+  // convertValueStep,
   ifStep,
   loopStep,
   functionsStep,
@@ -57,7 +57,7 @@ export function createDesigner(placeholder, walker, definition) {
         },
         {
           name: 'Logic',
-          steps: [ifStep, loopStep, calculateStep, convertValueStep],
+          steps: [ifStep, loopStep, calculateStep /* convertValueStep */],
         },
         {
           name: 'Debugging',

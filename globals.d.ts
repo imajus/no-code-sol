@@ -12,14 +12,24 @@ interface MyDefinition extends Definition {
   properties: {};
 }
 
+///// Services
+
+interface IVariableService {
+  get(name: string, cast?: object): string | number | boolean | null;
+  set(name: string, value: any): void;
+  resolve(pattern: string, cast?: object): string | number | boolean | null;
+  isSet(name: string): boolean;
+  delete(name: string): void;
+}
+
 ///// State
 
-type VariableState = Record<string, unknown>;
+type VariableState = Record<string, string>;
 
 interface GlobalState {
   startTime: Date;
   state: VariableState;
-  // $variables: VariablesService;
+  $variables: IVariableService;
   // $dynamics: DynamicsService;
   $logger: LoggerService;
 }
@@ -42,10 +52,10 @@ interface CalculateStep extends Step {
   type: 'calculate';
   componentType: 'task';
   properties: {
-    left: any;
+    left: string;
     operator: string;
-    right: any;
-    result: NullableVariable;
+    right: string;
+    result: string;
   };
 }
 
@@ -53,9 +63,9 @@ interface IfStep extends BranchedStep {
   type: 'if';
   componentType: 'switch';
   properties: {
-    a: any;
+    left: string;
     operator: string;
-    b: any;
+    right: string;
   };
 }
 
@@ -63,9 +73,9 @@ interface LoopStep extends SequentialStep {
   type: 'loop';
   componentType: 'container';
   properties: {
-    from: number;
-    to: number;
-    increment: number;
+    from: string;
+    to: string;
+    increment: string;
     operator: string;
     indexVariable: string;
     variables: string;

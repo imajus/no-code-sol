@@ -14,7 +14,7 @@ export const convertValueActivity = createAtomActivityFromHandler(
     if (!step.properties.target) {
       throw new Error('Target variable is required');
     }
-    const value = $variables.read(step.properties.source.name);
+    const value = $variables.get(step.properties.source.name);
     let convertedValue;
     switch (step.properties.target.type) {
       case 'number':

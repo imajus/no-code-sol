@@ -7,8 +7,8 @@ export const variableActivity = createAtomActivityFromHandler(
    * @param {VariableStep} step
    * @param {GlobalState} state
    */
-  async (step, { state }) => {
-    const { name, type, defaultValue } = step.properties;
-    state[name] = defaultValue; //{ value: null, type };
+  async (step, { $variables }) => {
+    const { name, defaultValue } = step.properties;
+    $variables.set(name, defaultValue);
   },
 );

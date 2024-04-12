@@ -1,62 +1,71 @@
-// /**
-//  *
-//  * @param {VariableState} state
-//  * @returns {VariableState}
-//  */
+/**
+ *
+ * @param {VariableState} state
+ * @returns {VariableState}
+ */
 // export function createVariableState(state) {
 //   return state ?? {};
 // }
 
-// export class VariablesService {
-//   state;
+/**
+ * @param {string} value
+ * @param {object} cast
+ * @returns {*}
+ */
+export function castTo(value, cast) {
+  switch (cast) {
+    case String:
+      return String(value);
+    case Number:
+      return Number(value);
+    case Boolean:
+      return Boolean(value);
+    default:
+      return value;
+  }
+}
 
-//   /**
-//    *
-//    * @param {VariableState} state
-//    */
-//   constructor(state) {
-//     this.state = state;
-//   }
+/**
+ * @implements {IVariableService}
+ */
+export class VariablesService {
+  /**
+   * @type {VariableState}
+   */
+  state;
 
-//   /**
-//    *
-//    * @param {string} name
-//    * @returns {*}
-//    */
-//   read(name) {
-//     const value = this.state[name];
-//     if (value === undefined) {
-//       throw new Error(`Cannot read unset variable: ${name}`);
-//     }
-//     return value;
-//   }
+  constructor(state) {
+    this.state = state;
+  }
 
-//   /**
-//    *
-//    * @param {string} name
-//    * @param {*} value
-//    */
-//   set(name, value) {
-//     if (value === undefined) {
-//       throw new Error('Cannot set variable to undefined');
-//     }
-//     this.state[name] = value;
-//   }
+  get(name, cast) {
+    const value = this.state[name];
+    if (value === undefined) {
+      throw new Error(`Cannot read unset variable: ${name}`);
+    }
+    return castTo(value, cast);
+  }
 
-//   /**
-//    *
-//    * @param {string} name
-//    * @returns {Boolean}
-//    */
-//   isSet(name) {
-//     return this.state[name] !== undefined;
-//   }
+  resolve(input, cast) {
+    for (const [name, value] of Object.entries(this.state)) {
+      // eslint-disable-next-line no-param-reassign
+      input = input.replace(`{${name}}`, value);
+    }
+    return castTo(input, cast);
+  }
 
-//   /**
-//    *
-//    * @param {string} name
-//    */
-//   delete(name) {
-//     delete this.state[name];
-//   }
-// }
+  set(name, value) {
+    if (value == null) {
+      throw new Error('Cannot set variable to null/undefined');
+    }
+    this.state[name] = String(value);
+  }
+
+  isSet(name) {
+    return this.state[name] !== undefined;
+  }
+
+  delete(name) {
+    delete this.state[name];
+  }
+}

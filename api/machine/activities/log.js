@@ -1,5 +1,4 @@
 import { createAtomActivityFromHandler } from 'sequential-workflow-machine';
-import { format } from '../formatter';
 
 export const logActivity = createAtomActivityFromHandler(
   'log',
@@ -8,8 +7,8 @@ export const logActivity = createAtomActivityFromHandler(
    * @param {LogStep} step
    * @param {GlobalState} state
    */
-  async (step, { state, $logger /*$variables, $dynamics */ }) => {
+  async (step, { $variables, $logger }) => {
     const { message } = step.properties;
-    $logger.log(format(message, state));
+    $logger.log($variables.resolve(message));
   },
 );

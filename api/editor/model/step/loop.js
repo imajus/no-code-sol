@@ -7,10 +7,10 @@ export const loopStep = {
   componentType: 'container',
   name: 'Loop',
   properties: {
-    from: 0,
+    from: '0',
     operator: '<',
-    to: 0,
-    increment: 1,
+    to: '0',
+    increment: '1',
     indexVariable: 'index',
     variables: '',
   },

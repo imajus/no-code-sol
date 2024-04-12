@@ -7,9 +7,9 @@ export const ifStep = {
   componentType: 'switch',
   name: 'If',
   properties: {
-    a: 0,
+    left: '0',
     operator: '===',
-    b: 0,
+    right: '0',
   },
   branches: {
     'true': [],
