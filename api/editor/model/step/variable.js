@@ -8,7 +8,7 @@ export const variableStep = {
   name: 'Variable',
   properties: {
     name: '',
-    type: '',
+    type: 'string',
     defaultValue: '',
   },
 };

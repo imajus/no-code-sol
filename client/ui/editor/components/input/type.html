@@ -1,0 +1,7 @@
+<template name="EditorTypeInput">
+  <select value="{{value}}" class="form-control">
+    {{#each type in types}}
+      <option {{typeAtts type}}>{{type}}</option>
+    {{/each}}
+  </select>
+</template>

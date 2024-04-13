@@ -6,17 +6,13 @@ body {
 	height: 100vh;
 	overflow: hidden;
 }
-body,
-input,
-textarea {
-	font: 14px/1.3em Arial, Verdana, sans-serif;
-}
 body {
 	display: flex;
 	flex-direction: row;
 }
 #designer {
 	flex: 3;
+	overflow: hidden;
 }
 @media (max-width: 768px) {
 	body {

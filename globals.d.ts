@@ -24,6 +24,7 @@ interface IVariableService {
 
 ///// State
 
+type VariableType = 'boolean' | 'string' | 'address' | 'uint256';
 type VariableState = Record<string, string>;
 
 interface GlobalState {
@@ -102,7 +103,7 @@ interface VariableStep extends Step {
   componentType: 'task';
   properties: {
     name: string;
-    type: string;
+    type: VariableType;
     defaultValue: string;
   };
 }
@@ -112,7 +113,7 @@ interface ArgumentStep extends Step {
   componentType: 'task';
   properties: {
     name: string;
-    type: string;
+    type: VariableType;
     defaultValue: string;
   };
 }

@@ -1,0 +1,23 @@
+<template name="EditorStep">
+  <div class="px-3">
+    <h3>Edit {{step.type}}</h3>
+    <div class="form-group">
+      <label>Name:</label>
+      <input type="text" value="{{step.name}}" class="form-control" data-target="name" />
+    </div>
+    {{#each property in properties}}
+      {{#if eq property.name 'type'}}
+        <div class="form-group">
+          <label>{{property.name}}:</label>
+          {{>EditorTypeInput value=property.value eventChange='changeType'}}
+        </div>
+      {{else}}
+        <div class="form-group">
+          <label>{{property.name}}:</label>
+          <input type="text" value="{{property.value}}" class="form-control" data-target="prop"
+            data-prop="{{property.name}}" />
+        </div>
+      {{/if}}
+    {{/each}}
+  </div>
+</template>

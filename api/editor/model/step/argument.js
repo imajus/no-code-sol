@@ -8,7 +8,7 @@ export const argumentStep = {
   name: 'Argument',
   properties: {
     name: '',
-    type: '',
+    type: 'string',
     defaultValue: '',
   },
 };
