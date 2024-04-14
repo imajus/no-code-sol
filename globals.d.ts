@@ -24,7 +24,12 @@ interface IVariableService {
 
 ///// State
 
-type VariableType = 'boolean' | 'string' | 'address' | 'uint256';
+type VariableType =
+  | 'boolean'
+  | 'string'
+  | 'address'
+  | 'uint256'
+  | 'mapping(address => uint256)';
 type VariableState = Record<string, string>;
 
 interface GlobalState {

@@ -3,6 +3,7 @@ import { Tracker } from 'meteor/tracker';
 import { TemplateController } from 'meteor/space:template-controller';
 import { executeMachine } from '/api/machine';
 import { AppStorage } from '/api/storage';
+import './input/mapping';
 import './playground.html';
 
 /**
@@ -70,41 +71,26 @@ TemplateController('EditorPlayground', {
       this.initArgs(definition);
     });
   },
-  helpers: {
-    outputState() {
-      const { output } = this.state;
-      if (output) {
-        return Object.entries(output).map(([name, value]) => ({
-          name,
-          value,
-        }));
-      }
-      return null;
-    },
-  },
   events: {
+    'changeState'(e, tmpl, { name, value }) {
+      this.updateState(name, value);
+    },
     'change [data-target=state]'(e) {
       const {
-        dataset: { id },
+        dataset: { name },
         value,
-      } = e.currentTarget;
-      const { state } = this.state;
-      this.state.state = state.map((item) => {
-        if (item._id === id) {
-          return { ...item, value: convertInputValue(value, item.type) };
-        }
-        return item;
-      });
+      } = e.target;
+      this.updateState(name, value);
     },
     'change [data-target=func]'(e) {
-      const { value } = e.currentTarget;
+      const { value } = e.target;
       this.state.func = convertInputValue(value, 'string');
     },
     'change [data-target=args]'(e) {
       const {
         dataset: { index },
         value,
-      } = e.currentTarget;
+      } = e.target;
       const { args } = this.state;
       this.state.args = args.map((arg, i) => {
         // eslint-disable-next-line eqeqeq
@@ -137,6 +123,22 @@ TemplateController('EditorPlayground', {
       }
       return statePath.join('/');
     },
+    extractVariables(definition) {
+      return definition.sequence
+        .filter(({ type }) => type === 'variable')
+        .map(({ properties }) => properties);
+    },
+    extractArguments(definition) {
+      const { func } = this.state;
+      const step = definition.sequence.find(({ type }) => type === 'functions');
+      const sequence = step.branches[func];
+      if (sequence) {
+        return sequence
+          .filter(({ type }) => type === 'argument')
+          .map(({ properties }) => properties);
+      }
+      return [];
+    },
     log(message, brand = 'normal') {
       const { logs } = this.state;
       this.state.logs = [...logs, { message, brand }];
@@ -146,44 +148,55 @@ TemplateController('EditorPlayground', {
     },
     initState(definition) {
       const { state } = this.state;
-      const variables = definition.sequence
-        .filter((step) => step.type === 'variable')
-        .map((step) => step.properties);
-      this.state.state = variables.map(({ name, type }) => ({
-        _id: name,
-        value: state.find(({ _id }) => _id === name)?.value,
-        type,
-      }));
+      this.state.state = this.extractVariables(definition).map(
+        ({ name, type }) => ({
+          name,
+          type,
+          value: state.find((item) => item.name === name)?.value,
+        }),
+      );
+    },
+    updateState(name, value) {
+      const { state } = this.state;
+      this.state.state = state.map((item) => {
+        if (item.name === name) {
+          return { ...item, value: convertInputValue(value, item.type) };
+        }
+        return item;
+      });
     },
     initArgs(definition) {
       const { func, args } = this.state;
       this.state.args = [];
       if (func) {
-        const step = definition.sequence.find(
-          (step) => step.type === 'functions',
+        this.state.args = this.extractArguments(definition).map(
+          ({ name, type }) => ({
+            name,
+            type,
+            value: args.find((arg) => arg.name === name)?.value,
+          }),
         );
-        const sequence = step.branches[func];
-        if (sequence) {
-          this.state.args = sequence
-            .filter((step) => step.type === 'argument')
-            .map(({ properties: { name, type } }) => ({
-              _id: name,
-              value: args.find(({ _id }) => _id === name)?.value,
-              type,
-            }));
-        }
       }
     },
-    serializeState() {
-      const { state } = this.state;
-      return state.reduce(
-        (acc, { _id, value }) => ({ ...acc, [_id]: value }),
-        {},
-      );
+    serializeInput() {
+      const { func, state, args } = this.state;
+      return {
+        func,
+        ...[...state, ...args].reduce(
+          (acc, { name, value }) => ({ ...acc, [name]: value }),
+          {},
+        ),
+      };
+    },
+    deserializeOutput(definition, state) {
+      this.state.output = [
+        ...this.extractVariables(definition),
+        //FIXME: Do we need to show function arguments?
+        // ...this.extractArguments(definition),
+      ].map(({ name, type }) => ({ name, type, value: state[name] }));
     },
     async execute() {
       const { designer } = this.data;
-      const { func, args } = this.state;
       this.resetLogs();
       try {
         const definition = designer.getDefinition();
@@ -191,14 +204,7 @@ TemplateController('EditorPlayground', {
           this.log('Definition is not valid', 'warning');
           return;
         }
-        const state = {
-          ...this.serializeState(),
-          ...args.reduce(
-            (acc, { _id, value }) => ({ ...acc, [_id]: value }),
-            {},
-          ),
-          func,
-        };
+        const state = this.serializeInput();
         const snapshot = await executeMachine(
           definition,
           state,
@@ -212,7 +218,7 @@ TemplateController('EditorPlayground', {
           const { cause } = snapshot.unhandledError;
           throw cause;
         }
-        this.state.output = state;
+        this.deserializeOutput(definition, state);
       } catch (err) {
         console.error(err);
         this.log(`FAILED: ${err.message}`, 'danger');

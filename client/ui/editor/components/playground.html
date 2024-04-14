@@ -8,8 +8,13 @@
       <h4>State</h4>
       {{#each item in state.state}}
         <div class="form-group">
-          <label>{{item._id}}:</label>
-          <input type="text" value="{{item.value}}" class="form-control" data-target="state" data-id="{{item._id}}" />
+          <label>{{item.name}}:</label>
+          {{#if eq item.type 'mapping(address => uint256)'}}
+            {{>EditorMappingInput value=item.value eventChange='changeState' eventChangeData=item}}
+          {{else}}
+            <input type="text" value="{{item.value}}" class="form-control" data-target="state"
+              data-name="{{item.name}}" />
+          {{/if}}
         </div>
       {{/each}}
     {{/if}}
@@ -21,7 +26,7 @@
       <h4>Arguments</h4>
       {{#each arg in state.args}}
         <div class="form-group">
-          <label>{{arg._id}}:</label>
+          <label>{{arg.name}}:</label>
           <input type="text" value="{{arg.value}}" class="form-control" data-target="args" data-index="{{@index}}" />
         </div>
       {{/each}}
@@ -33,10 +38,14 @@
           <li class="text-{{log.brand}}">{{log.message}}</li>
         {{/each}}
       </ul>
-      {{#each item in outputState}}
+      {{#each item in state.output}}
         <div class="form-group">
           <label>{{item.name}}:</label>
-          <input type="text" value="{{item.value}}" class="form-control" readonly />
+          {{#if eq item.type 'mapping(address => uint256)'}}
+            {{>EditorMappingInput value=item.value readonly=true}}
+          {{else}}
+            <input type="text" value="{{item.value}}" class="form-control" readonly />
+          {{/if}}
         </div>
       {{/each}}
     {{/if}}

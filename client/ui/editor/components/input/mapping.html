@@ -1,0 +1,25 @@
+<template name="EditorMappingInput">
+  <div>
+    {{#each item in state.items}}
+      <div class="form-row mb-3">
+        <div class="col">
+          <input type="text" value="{{item.key}}" class="form-control" data-target="key" data-index="{{@index}}"
+            {{inputAtts}} />
+        </div>
+        <div class="col">
+          <input type="text" value="{{item.value}}" class="form-control" data-target="value" data-index="{{@index}}"
+            {{inputAtts}} />
+        </div>
+        {{#unless readonly}}
+          <div class="col">
+            <button class="btn btn-outline-danger btn-block" data-action="deleteItem"
+              data-index="{{@index}}">Delete</button>
+          </div>
+        {{/unless}}
+      </div>
+    {{/each}}
+    {{#unless readonly}}
+      <button class="btn btn-outline-primary btn-block" data-action="addItem">Add item</button>
+    {{/unless}}
+  </div>
+</template>

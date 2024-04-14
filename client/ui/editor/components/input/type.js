@@ -11,7 +11,14 @@ TemplateController('EditorTypeInput', {
     'eventChange': String,
   }),
   helpers: {
-    types: () => ['string', 'number', 'boolean', 'address', 'uint256'],
+    types: () => [
+      'string',
+      'number',
+      'boolean',
+      'address',
+      'uint256',
+      'mapping(address => uint256)',
+    ],
     typeAtts(type) {
       const { value } = this.props;
       if (value === type) {
