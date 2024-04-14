@@ -39,8 +39,16 @@ export class VariablesService {
   }
 
   get(name, cast) {
-    const value = this.state[name];
-    if (value === undefined) {
+    let value;
+    const match = name.match(/(.+)\[(.+)\]/);
+    if (match) {
+      const mapping = JSON.parse(this.state[match[1]]);
+      const key = this.isSet(match[2]) ? this.get(match[2]) : match[2];
+      value = mapping.find((item) => item.key === key)?.value;
+    } else {
+      value = this.state[name];
+    }
+    if (value == null) {
       throw new Error(`Cannot read unset variable: ${name}`);
     }
     return castTo(value, cast);
@@ -48,8 +56,29 @@ export class VariablesService {
 
   resolve(input, cast) {
     for (const [name, value] of Object.entries(this.state)) {
+      const regex = new RegExp(`{${name}\\[(.+?)\\]}`);
+      do {
+        const output = input.replace(regex, (match, param) => {
+          const mapping = JSON.parse(value);
+          const key = this.isSet(param) ? this.get(param) : param;
+          return mapping.find((item) => item.key === key)?.value ?? '';
+        });
+        if (output === input) {
+          break;
+        }
+        // eslint-disable-next-line no-param-reassign
+        input = output;
+      } while (true);
+      // do {
+      //   const match = input.match(regex);
+      //   if (match) {
+      //     input
+      //     // continue;
+      //   }
+      //   break;
+      // } while (true);
       // eslint-disable-next-line no-param-reassign
-      input = input.replace(`{${name}}`, value);
+      input = input.replaceAll(`{${name}}`, value);
     }
     return castTo(input, cast);
   }
@@ -58,11 +87,24 @@ export class VariablesService {
     if (value == null) {
       throw new Error('Cannot set variable to null/undefined');
     }
-    this.state[name] = String(value);
+    const match = name.match(/(.+)\[(.+)\]/);
+    if (match) {
+      const mapping = JSON.parse(this.state[match[1]]);
+      const key = this.isSet(match[2]) ? this.get(match[2]) : match[2];
+      const item = mapping.find((item) => item.key === key);
+      if (item) {
+        item.value = String(value);
+      } else {
+        mapping.push({ key, value: String(value) });
+      }
+      this.state[match[1]] = JSON.stringify(mapping);
+    } else {
+      this.state[name] = String(value);
+    }
   }
 
   isSet(name) {
-    return this.state[name] !== undefined;
+    return name in this.state;
   }
 
   delete(name) {

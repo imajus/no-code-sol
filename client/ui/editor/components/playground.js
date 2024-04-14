@@ -178,6 +178,7 @@ TemplateController('EditorPlayground', {
         );
       }
     },
+
     serializeInput() {
       const { func, state, args } = this.state;
       return {
