@@ -2,7 +2,7 @@ import { cloneDeep } from 'lodash';
 // import SimpleSchema from 'simpl-schema';
 import { Tracker } from 'meteor/tracker';
 import { TemplateController } from 'meteor/space:template-controller';
-import { executeMachine } from '/api/machine';
+import { executeMachine } from '/api/emulator';
 import { AppStorage } from '/api/storage';
 import { convertInputValue } from './util';
 import './input/mapping';
