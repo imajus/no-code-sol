@@ -50,6 +50,23 @@ TemplateController('EditorPlayground', {
       this.initArgs(definition);
     });
   },
+  helpers: {
+    functs() {
+      const { designer } = this.data;
+      const definition = designer.getDefinition();
+      const step = definition.sequence.find(({ type }) => type === 'functions');
+      if (step) {
+        return Object.keys(step.branches);
+      }
+      return null;
+    },
+    selectedAttr(cur, value) {
+      if (cur === value) {
+        return { selected: true };
+      }
+      return {};
+    },
+  },
   events: {
     'changeState'(e, tmpl, { name, value }) {
       this.updateState(name, value);
