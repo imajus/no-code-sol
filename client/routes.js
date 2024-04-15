@@ -11,8 +11,11 @@ import './ui/home';
 
 FlowRouter.wait();
 Meteor.startup(async () => {
-  await Web3Accounts.init();
-  FlowRouter.initialize();
+  try {
+    await Web3Accounts.init();
+  } finally {
+    FlowRouter.initialize();
+  }
 });
 
 FlowRouter.route('/', {
