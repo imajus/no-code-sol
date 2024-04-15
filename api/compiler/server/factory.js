@@ -1,7 +1,7 @@
 import { AbstractBinaryInterfaceCompiler } from './abi';
 import { EthereumBytecodeCompiler } from './bin';
 import { SolidityCompiler } from './sol';
-import { AbstractSyntaxTreeCompiler } from '../ast';
+import { AbstractSyntaxTreeCompiler } from './ast';
 
 /**
  * Compiler factory

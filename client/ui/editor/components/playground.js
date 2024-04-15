@@ -8,6 +8,42 @@ import { convertInputValue } from './util';
 import './input/mapping';
 import './playground.html';
 
+export function serialize(value, type) {
+  switch (type) {
+    case 'boolean':
+      return Boolean(value);
+    case 'uint256':
+      return BigInt(value);
+    case 'mapping(address => uint256)':
+      return value?.reduce(
+        (acc, { key, value }) => ({ ...acc, [key]: BigInt(value) }),
+        {},
+      );
+    case 'string':
+    case 'address':
+    default:
+      return value;
+  }
+}
+
+export function deserialize(value, type) {
+  switch (type) {
+    case 'boolean':
+      return Boolean(value);
+    case 'uint256':
+      return BigInt(value);
+    case 'mapping(address => uint256)':
+      return Object.entries(value).map(([key, value]) => ({
+        key,
+        value: String(value),
+      }));
+    case 'string':
+    case 'address':
+    default:
+      return value;
+  }
+}
+
 TemplateController('EditorPlayground', {
   // props: new SimpleSchema({
   //   'designer': {
@@ -20,6 +56,7 @@ TemplateController('EditorPlayground', {
   //   },
   // }),
   state: {
+    definition: null,
     state: null,
     func: null,
     args: null,
@@ -28,37 +65,39 @@ TemplateController('EditorPlayground', {
   },
   onCreated() {
     const { designer } = this.data;
-    const definition = designer.getDefinition();
+    this.state.definition = designer.getDefinition();
     const storage = new AppStorage('input');
     this.unpack(storage);
-    this.initState(definition);
-    this.initArgs(definition);
     this.autorun(() => {
-      const { state, func } = this.state;
-      Tracker.nonreactive(() => this.initArgs(definition));
-      this.autorun(() => {
-        const { args } = this.state;
-        storage.set({ state, func, args });
-        if (func) {
-          Tracker.nonreactive(() => this.execute());
+      const { definition } = this.state;
+      Tracker.nonreactive(() => {
+        const { func } = this.state;
+        const functs = this.functs();
+        this.initState(definition);
+        this.initArgs(definition);
+        if (!functs.includes(func)) {
+          [this.state.func] = functs;
         }
       });
     });
+    this.autorun(() => {
+      const { /* definition, */ state, func } = this.state;
+      // Tracker.nonreactive(() => this.initArgs(definition));
+      // this.autorun(() => {
+      const { args } = this.state;
+      storage.set({ state, func, args });
+      if (func) {
+        Tracker.nonreactive(() => this.execute());
+      }
+      // });
+    });
     designer.onDefinitionChanged.subscribe(() => {
-      const definition = designer.getDefinition();
-      this.initState(definition);
-      this.initArgs(definition);
+      this.state.definition = designer.getDefinition();
     });
   },
   helpers: {
     functs() {
-      const { designer } = this.data;
-      const definition = designer.getDefinition();
-      const step = definition.sequence.find(({ type }) => type === 'functions');
-      if (step) {
-        return Object.keys(step.branches);
-      }
-      return null;
+      return this.functs();
     },
     selectedAttr(cur, value) {
       if (cur === value) {
@@ -99,6 +138,14 @@ TemplateController('EditorPlayground', {
     },
   },
   private: {
+    functs() {
+      const { definition } = this.state;
+      const step = definition.sequence.find(({ type }) => type === 'functions');
+      if (step) {
+        return Object.keys(step.branches);
+      }
+      return [];
+    },
     unpack(storage) {
       const { state, func, args } = storage.get() ?? {};
       this.state.state = state ?? [];
@@ -148,7 +195,7 @@ TemplateController('EditorPlayground', {
       this.state.state = this.extractVariables(definition).map(
         ({ name, type }) => ({
           name,
-          type,
+          type: type.value,
           value: state.find((item) => item.name === name)?.value,
         }),
       );
@@ -169,7 +216,7 @@ TemplateController('EditorPlayground', {
         this.state.args = this.extractArguments(definition).map(
           ({ name, type }) => ({
             name,
-            type,
+            type: type.value,
             value: args.find((arg) => arg.name === name)?.value,
           }),
         );
@@ -180,17 +227,33 @@ TemplateController('EditorPlayground', {
       return {
         func,
         ...[...state, ...args].reduce(
-          (acc, { name, value }) => ({ ...acc, [name]: cloneDeep(value) }),
+          (acc, { name, type, value }) => ({
+            ...acc,
+            [name]: serialize(cloneDeep(value), type),
+          }),
           {},
         ),
       };
     },
     deserializeOutput(definition, state) {
-      this.state.output = [
+      const output = [
         ...this.extractVariables(definition),
         //FIXME: Do we need to show function arguments?
         // ...this.extractArguments(definition),
-      ].map(({ name, type }) => ({ name, type, value: state[name] }));
+      ].map(({ name, type }) => ({
+        name,
+        type: type.value,
+        value: deserialize(state[name], type.value),
+      }));
+      //FIXME: Dirty hack
+      if ('return' in state) {
+        output.push({
+          name: 'return',
+          type: 'string',
+          value: String(state['return']),
+        });
+      }
+      this.state.output = output;
     },
     async execute() {
       const { designer } = this.data;

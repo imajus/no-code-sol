@@ -76,8 +76,11 @@ TemplateController('EditorMappingInput', {
         // eslint-disable-next-line eqeqeq
         if (i == index) {
           //FIXME: Make this adjustable
-          const type = target === 'key' ? 'address' : 'uint256';
-          return { ...item, [target]: convertInputValue(value, type) };
+          // const type = target === 'key' ? 'address' : 'uint256';
+          return {
+            ...item,
+            [target]: value /* convertInputValue(value, type) */,
+          };
         }
         return item;
       });

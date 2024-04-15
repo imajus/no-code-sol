@@ -2,8 +2,11 @@ import { Designer } from 'sequential-workflow-designer';
 import {
   logStep,
   calculateStep,
+  convertValueStep,
   ifStep,
   loopStep,
+  // mappingGetValueStep,
+  // mappingSetValueStep,
   functionsStep,
   functionsStepEditorProvider,
   rootEditorProvider,
@@ -55,7 +58,15 @@ export function createDesigner(placeholder, walker, definition) {
         },
         {
           name: 'Logic',
-          steps: [ifStep, loopStep, calculateStep, returnStep],
+          steps: [
+            ifStep,
+            loopStep,
+            // mappingGetValueStep,
+            // mappingSetValueStep,
+            calculateStep,
+            // convertValueStep,
+            returnStep,
+          ],
         },
         {
           name: 'Debugging',

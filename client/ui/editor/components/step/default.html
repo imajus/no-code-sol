@@ -5,17 +5,21 @@
       <label>Name:</label>
       <input type="text" value="{{step.name}}" class="form-control" data-target="name" />
     </div>
-    {{#each property in properties}}
-      {{#if eq property.name 'type'}}
+    {{#each properties}}
+      {{#if eq property.propertyType 'type'}}
         <div class="form-group">
-          <label>{{property.name}}:</label>
-          {{>EditorTypeInput value=property.value eventChange='changeType'}}
+          <label>{{name}}:</label>
+          {{>EditorTypeInput name=name value=property.value eventChange='changeType'}}
+        </div>
+      {{else if isDynamic property}}
+        <div class="form-group">
+          <label>{{name}}:</label>
+          {{>EditorDynamicValue name=name property=property eventChange='changeDynamic'}}
         </div>
       {{else}}
         <div class="form-group">
-          <label>{{property.name}}:</label>
-          <input type="text" value="{{property.value}}" class="form-control" data-target="prop"
-            data-prop="{{property.name}}" />
+          <label>{{name}}:</label>
+          <input type="text" value="{{property}}" class="form-control" data-target="prop" data-prop="{{name}}" />
         </div>
       {{/if}}
     {{/each}}

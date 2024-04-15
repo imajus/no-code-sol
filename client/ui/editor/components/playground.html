@@ -20,7 +20,7 @@
     {{/if}}
     <h4>Function</h4>
     <div class="form-group">
-      <select class="form-control">
+      <select class="form-control" data-target="func">
         {{#each func in functs}}
           <option {{selectedAttr func state.func}}>{{func}}</option>
         {{/each}}

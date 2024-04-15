@@ -1,4 +1,5 @@
 import { TemplateController } from 'meteor/space:template-controller';
+import '../input/dynamic';
 import '../input/type';
 import './default.html';
 
@@ -14,10 +15,15 @@ TemplateController('EditorStep', {
   helpers: {
     properties() {
       const { step } = this.data;
-      return Object.entries(step.properties).map(([name, value]) => ({
+      return Object.entries(step.properties).map(([name, property]) => ({
         name,
-        value,
+        property,
       }));
+    },
+    isDynamic(property) {
+      return ['variable', 'mapping', 'constant'].includes(
+        property.propertyType,
+      );
     },
   },
   events: {
@@ -32,9 +38,13 @@ TemplateController('EditorStep', {
       } = e.target;
       onChangeProperty(prop, e.target.value.trim());
     },
-    'changeType'(e, tmpl, { value }) {
+    'changeType'(e, tmpl, { name, value }) {
       const { onChangeProperty } = this.data;
-      onChangeProperty('type', value);
+      onChangeProperty(name, { propertyType: 'type', value });
+    },
+    'changeDynamic'(e, tmpl, { name, value }) {
+      const { onChangeProperty } = this.data;
+      onChangeProperty(name, value);
     },
   },
   private: {},

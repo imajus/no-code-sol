@@ -1,9 +1,10 @@
 // export { rootModel } from './root';
 export { logStep } from './step/log';
 export { calculateStep } from './step/calculate';
-// export { convertValueStep } from './step/convert-value';
+export { convertValueStep } from './step/convert';
 export { ifStep } from './step/if';
 export { loopStep } from './step/loop';
+// export { mappingGetValueStep, mappingSetValueStep } from './step/mapping';
 export { functionsStep, functionsStepEditorProvider } from './step/functions';
 export { variableStep } from './step/variable';
 export { returnStep } from './step/return';

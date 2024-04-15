@@ -9,6 +9,6 @@ export const returnActivity = createAtomActivityFromHandler(
    */
   async (step, { $variables }) => {
     const { result } = step.properties;
-    $variables.set('result', $variables.resolve(result));
+    $variables.set('return', $variables.resolve(result));
   },
 );

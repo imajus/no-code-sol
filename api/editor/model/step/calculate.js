@@ -7,9 +7,20 @@ export const calculateStep = {
   componentType: 'task',
   name: 'Calculate',
   properties: {
-    left: '',
+    left: {
+      propertyType: 'constant',
+      type: 'uint256',
+      value: '',
+    },
     operator: '+',
-    right: '',
-    result: '',
+    right: {
+      propertyType: 'constant',
+      type: 'uint256',
+      value: '',
+    },
+    result: {
+      propertyType: 'variable',
+      name: 'uint256',
+    },
   },
 };

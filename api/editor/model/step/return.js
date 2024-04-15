@@ -7,6 +7,10 @@ export const returnStep = {
   componentType: 'task',
   name: 'Return',
   properties: {
-    result: '',
+    result: {
+      propertyType: 'constant',
+      type: 'string',
+      value: '',
+    },
   },
 };

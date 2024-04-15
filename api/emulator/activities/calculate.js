@@ -36,8 +36,8 @@ export const calculateActivity = createAtomActivityFromHandler(
     if (!result) {
       throw new Error('Result variable is not defined');
     }
-    const a = $variables.resolve(left, BigInt);
-    const b = $variables.resolve(right, BigInt);
-    $variables.set(result, String(calculate(a, b, operator)));
+    const a = $variables.resolve(left);
+    const b = $variables.resolve(right);
+    $variables.set(result, calculate(a, b, operator));
   },
 );

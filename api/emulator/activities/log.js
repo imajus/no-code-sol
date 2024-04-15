@@ -9,6 +9,6 @@ export const logActivity = createAtomActivityFromHandler(
    */
   async (step, { $variables, $logger }) => {
     const { message } = step.properties;
-    $logger.log($variables.resolve(message));
+    $logger.log($variables.format(message));
   },
 );

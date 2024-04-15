@@ -8,7 +8,8 @@ export const argumentActivity = createAtomActivityFromHandler(
    * @param {GlobalState} state
    */
   async (step, { $variables }) => {
-    const { name, defaultValue } = step.properties;
+    const { name, type, defaultValue } = step.properties;
+    $variables.define(name, type.value);
     if (!$variables.isSet(name)) {
       $variables.set(name, defaultValue);
     }

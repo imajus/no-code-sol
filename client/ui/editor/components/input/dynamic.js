@@ -1,12 +1,12 @@
 import SimpleSchema from 'simpl-schema';
 import { TemplateController } from 'meteor/space:template-controller';
-import './type.html';
+import './dynamic.html';
 
-TemplateController('EditorTypeInput', {
+TemplateController('EditorDynamicValue', {
   props: new SimpleSchema(
     {
       'name': String,
-      'value': String,
+      'property': { type: Object, blackbox: true },
       'eventChange': String,
       'eventChangeData': String,
     },
@@ -35,7 +35,11 @@ TemplateController('EditorTypeInput', {
       const { name, eventChange, eventChangeData } = this.props;
       const { value } = e.target;
       if (eventChange) {
-        this.triggerEvent(eventChange, { ...eventChangeData, name, value });
+        this.triggerEvent(eventChange, {
+          ...eventChangeData,
+          name,
+          value: JSON.parse(value),
+        });
       }
     },
   },

@@ -1,7 +1,6 @@
 import { createWorkflowMachineBuilder } from 'sequential-workflow-machine';
 import { activitySet } from './activities';
 import { VariablesService } from './services/variables';
-// import { DynamicsService } from './services/dynamics';
 import { LoggerService } from './services/logger';
 
 const builder = createWorkflowMachineBuilder(activitySet);
@@ -18,13 +17,11 @@ export function executeMachine(definition, state, onStateChanged, onLog) {
   const interpreter = machine.create({
     init: () => {
       const $variables = new VariablesService(state);
-      // const $dynamics = new DynamicsService($variables);
       const $logger = new LoggerService(onLog);
       return {
         startTime: new Date(),
         state,
         $variables,
-        // $dynamics,
         $logger,
       };
     },

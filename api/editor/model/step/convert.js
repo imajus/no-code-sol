@@ -7,7 +7,11 @@ export const convertValueStep = {
   componentType: 'task',
   name: 'Convert value',
   properties: {
-    source: 'string',
-    target: 'string',
+    source: {
+      propertyType: 'constant',
+      type: 'uint256',
+      value: '',
+    },
+    target: '',
   },
 };
