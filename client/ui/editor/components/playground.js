@@ -1,33 +1,12 @@
+import { cloneDeep } from 'lodash';
 // import SimpleSchema from 'simpl-schema';
 import { Tracker } from 'meteor/tracker';
 import { TemplateController } from 'meteor/space:template-controller';
 import { executeMachine } from '/api/machine';
 import { AppStorage } from '/api/storage';
+import { convertInputValue } from './util';
 import './input/mapping';
 import './playground.html';
-
-/**
- *
- * @param {string} text
- * @param {string} type
- * @returns {*}
- */
-function convertInputValue(text, type) {
-  return text || undefined;
-  // switch (type) {
-  //   case 'string':
-  //     return (text ?? '').trim();
-  //   case 'number': {
-  //     const value = parseFloat(text);
-  //     if (Number.isNaN(value)) {
-  //       throw new Error(`Invalid input number value: ${text || '<empty>'}`);
-  //     }
-  //     return value;
-  //   }
-  //   default:
-  //     throw new Error(`Unknown variable type: ${type}`);
-  // }
-}
 
 TemplateController('EditorPlayground', {
   // props: new SimpleSchema({
@@ -80,11 +59,12 @@ TemplateController('EditorPlayground', {
         dataset: { name },
         value,
       } = e.target;
-      this.updateState(name, value);
+      const { type } = this.state.state.find((item) => item.name === name);
+      this.updateState(name, convertInputValue(value, type));
     },
     'change [data-target=func]'(e) {
       const { value } = e.target;
-      this.state.func = convertInputValue(value, 'string');
+      this.state.func = value.trim();
     },
     'change [data-target=args]'(e) {
       const {
@@ -160,7 +140,7 @@ TemplateController('EditorPlayground', {
       const { state } = this.state;
       this.state.state = state.map((item) => {
         if (item.name === name) {
-          return { ...item, value: convertInputValue(value, item.type) };
+          return { ...item, value };
         }
         return item;
       });
@@ -178,13 +158,12 @@ TemplateController('EditorPlayground', {
         );
       }
     },
-
     serializeInput() {
       const { func, state, args } = this.state;
       return {
         func,
         ...[...state, ...args].reduce(
-          (acc, { name, value }) => ({ ...acc, [name]: value }),
+          (acc, { name, value }) => ({ ...acc, [name]: cloneDeep(value) }),
           {},
         ),
       };

@@ -20,6 +20,8 @@ export function castTo(value, cast) {
       return Number(value);
     case Boolean:
       return Boolean(value);
+    case BigInt:
+      return BigInt(value);
     default:
       return value;
   }
@@ -42,7 +44,10 @@ export class VariablesService {
     let value;
     const match = name.match(/(.+)\[(.+)\]/);
     if (match) {
-      const mapping = JSON.parse(this.state[match[1]]);
+      const mapping = this.state[match[1]];
+      if (!Array.isArray(mapping)) {
+        throw new Error(`Expected to be an array: ${match[1]}`);
+      }
       const key = this.isSet(match[2]) ? this.get(match[2]) : match[2];
       value = mapping.find((item) => item.key === key)?.value;
     } else {
@@ -59,7 +64,10 @@ export class VariablesService {
       const regex = new RegExp(`{${name}\\[(.+?)\\]}`);
       do {
         const output = input.replace(regex, (match, param) => {
-          const mapping = JSON.parse(value);
+          const mapping = value;
+          if (!Array.isArray(mapping)) {
+            throw new Error(`Expected to be an array: ${match[1]}`);
+          }
           const key = this.isSet(param) ? this.get(param) : param;
           return mapping.find((item) => item.key === key)?.value ?? '';
         });
@@ -69,14 +77,6 @@ export class VariablesService {
         // eslint-disable-next-line no-param-reassign
         input = output;
       } while (true);
-      // do {
-      //   const match = input.match(regex);
-      //   if (match) {
-      //     input
-      //     // continue;
-      //   }
-      //   break;
-      // } while (true);
       // eslint-disable-next-line no-param-reassign
       input = input.replaceAll(`{${name}}`, value);
     }
@@ -89,17 +89,20 @@ export class VariablesService {
     }
     const match = name.match(/(.+)\[(.+)\]/);
     if (match) {
-      const mapping = JSON.parse(this.state[match[1]]);
+      const mapping = this.state[match[1]];
+      if (!Array.isArray(mapping)) {
+        throw new Error(`Expected to be an array: ${match[1]}`);
+      }
       const key = this.isSet(match[2]) ? this.get(match[2]) : match[2];
       const item = mapping.find((item) => item.key === key);
       if (item) {
-        item.value = String(value);
+        item.value = value;
       } else {
-        mapping.push({ key, value: String(value) });
+        mapping.push({ key, value: value });
       }
-      this.state[match[1]] = JSON.stringify(mapping);
+      this.state[match[1]] = mapping;
     } else {
-      this.state[name] = String(value);
+      this.state[name] = value;
     }
   }
 

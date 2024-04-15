@@ -30,7 +30,10 @@ type VariableType =
   | 'address'
   | 'uint256'
   | 'mapping(address => uint256)';
-type VariableState = Record<string, string>;
+type VariableState = Record<
+  string,
+  boolean | string | number | array<string, number>
+>;
 
 interface GlobalState {
   startTime: Date;

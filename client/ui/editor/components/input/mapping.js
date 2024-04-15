@@ -1,12 +1,20 @@
+import { isEmpty, isEqual, isEqualWith } from 'lodash';
 import SimpleSchema from 'simpl-schema';
 import { Tracker } from 'meteor/tracker';
 import { TemplateController } from 'meteor/space:template-controller';
+import { convertInputValue } from '../util';
 import './mapping.html';
 
 TemplateController('EditorMappingInput', {
   props: new SimpleSchema(
     {
-      'value': String,
+      'value': Array,
+      'value.$': {
+        type: Object,
+        required: true,
+      },
+      'value.$.key': String,
+      'value.$.value': String,
       'readonly': Boolean,
       'eventChange': String,
       'eventChangeData': {
@@ -24,8 +32,13 @@ TemplateController('EditorMappingInput', {
   onCreated() {
     this.autorun(() => {
       const { value } = this.props;
+      const items = Tracker.nonreactive(() => this.state.items);
       if (value) {
-        this.state.items = JSON.parse(value) ?? [];
+        if (!isEqualWith(value, items, isEqual)) {
+          this.state.items = value;
+        }
+      } else if (!isEmpty(items)) {
+        this.state.items = [];
       }
     });
     this.autorun((comp) => {
@@ -36,7 +49,7 @@ TemplateController('EditorMappingInput', {
           if (eventChange) {
             this.triggerEvent(eventChange, {
               ...eventChangeData,
-              value: JSON.stringify(items),
+              value: items,
             });
           }
         });
@@ -62,7 +75,9 @@ TemplateController('EditorMappingInput', {
       this.state.items = items.map((item, i) => {
         // eslint-disable-next-line eqeqeq
         if (i == index) {
-          return { ...item, [target]: value.trim() };
+          //FIXME: Make this adjustable
+          const type = target === 'key' ? 'address' : 'uint256';
+          return { ...item, [target]: convertInputValue(value, type) };
         }
         return item;
       });
