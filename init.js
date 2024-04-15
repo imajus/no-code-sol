@@ -1,5 +1,6 @@
 import SimpleSchema from 'simpl-schema';
 import { Meteor } from 'meteor/meteor';
+import { Web3Config } from 'meteor/majus:web3';
 
 SimpleSchema.debug = Meteor.isDevelopment;
 SimpleSchema.extendOptions(['autoform']);
@@ -12,3 +13,7 @@ SimpleSchema.extendOptions(['autoform']);
 //     },
 //   },
 // });
+
+Web3Config.set({
+  template: 'bootstrap4',
+});

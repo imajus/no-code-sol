@@ -1,4 +1,6 @@
+import { Meteor } from 'meteor/meteor';
 import { FlowRouter } from 'meteor/ostrio:flow-router-extra';
+import { Web3Accounts } from 'meteor/majus:web3';
 import './ui/layout';
 import './ui/home';
 
@@ -6,6 +8,12 @@ import './ui/home';
 // FlowRouter.route('/',
 //   triggersEnter: [(context, redirect) => redirect('xxx')],
 // });
+
+FlowRouter.wait();
+Meteor.startup(async () => {
+  await Web3Accounts.init();
+  FlowRouter.initialize();
+});
 
 FlowRouter.route('/', {
   action() {

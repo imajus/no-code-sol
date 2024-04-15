@@ -1,0 +1,18 @@
+<template name="EditorRoot">
+  <div class="px-3">
+    <h3 class="my-3">Designer actions</h3>
+    <button class="btn btn-outline-info btn-block" data-action="exportSequence">Export sequence</button>
+    <button class="btn btn-outline-info btn-block" data-action="importSequence">Import sequence</button>
+    <button class="btn btn-outline-danger btn-block" data-action="resetSequence">Reset sequence</button>
+    <h3 class="my-3">Compiler actions</h3>
+    <button class="btn btn-outline-info btn-block" data-action="generate" data-format="abi">Generate ABI</button>
+    <button class="btn btn-outline-info btn-block" data-action="generate" data-format="ast">Generate AST</button>
+    <button class="btn btn-outline-info btn-block" data-action="generate" data-format="sol">Generate Solidity</button>
+    <h3 class="my-3">Blockchain actions</h3>
+    {{#if Web3.isConnected}}
+      <button class="btn btn-outline-primary btn-block" data-action="deploy">Deploy to EVM</button>
+    {{else}}
+      <button class="btn btn-outline-warning btn-block" data-action="connect">Connect Wallet</button>
+    {{/if}}
+  </div>
+</template>

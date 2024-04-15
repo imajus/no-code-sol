@@ -128,7 +128,7 @@ TemplateController('EditorPlayground', {
     extractArguments(definition) {
       const { func } = this.state;
       const step = definition.sequence.find(({ type }) => type === 'functions');
-      const sequence = step.branches[func];
+      const sequence = step?.branches[func];
       if (sequence) {
         return sequence
           .filter(({ type }) => type === 'argument')

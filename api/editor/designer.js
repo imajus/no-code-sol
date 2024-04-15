@@ -6,6 +6,7 @@ import {
   loopStep,
   functionsStep,
   functionsStepEditorProvider,
+  rootEditorProvider,
   defaultStepEditorProvider,
   variableStep,
   returnStep,
@@ -22,11 +23,7 @@ export function createDesigner(placeholder, walker, definition) {
   return Designer.create(placeholder, definition, {
     controlBar: true,
     editors: {
-      rootEditorProvider() {
-        const root = document.createElement('div');
-        root.innerText = 'Please select any step.';
-        return root;
-      },
+      rootEditorProvider,
       stepEditorProvider(step, context) {
         switch (step.type) {
           case 'functions':

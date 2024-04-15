@@ -13,4 +13,8 @@ export class AppStorage {
   set(value) {
     window.localStorage[this.name] = JSON.stringify(value);
   }
+
+  reset() {
+    delete window.localStorage[this.name];
+  }
 }

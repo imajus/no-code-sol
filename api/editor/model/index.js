@@ -7,5 +7,5 @@ export { loopStep } from './step/loop';
 export { functionsStep, functionsStepEditorProvider } from './step/functions';
 export { variableStep } from './step/variable';
 export { returnStep } from './step/return';
-export { defaultStepEditorProvider } from './provider';
+export { rootEditorProvider, defaultStepEditorProvider } from './provider';
 export { argumentStep } from './step/argument';
