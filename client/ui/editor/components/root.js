@@ -5,8 +5,8 @@ import { AppStorage } from '/api/storage';
 import { compile } from '/api/compiler';
 import './root.html';
 
-function download(filename, data) {
-  const blob = new Blob([JSON.stringify(data)], { type: 'text/json' });
+function download(data, { filename, type }) {
+  const blob = new Blob([data], { type });
   const link = document.createElement('a');
   link.download = filename;
   link.href = window.URL.createObjectURL(blob);
@@ -52,10 +52,16 @@ TemplateController('EditorRoot', {
     'click [data-action=exportSequence]'() {
       const definition = new AppStorage('definition');
       const input = new AppStorage('input');
-      download(`NoCodeSol-${new Date().toISOString()}.json`, {
-        definition: definition.get(),
-        input: input.get(),
-      });
+      download(
+        JSON.stringify({
+          definition: definition.get(),
+          input: input.get(),
+        }),
+        {
+          filename: `NoCodeSol-${new Date().toISOString()}.json`,
+          type: 'application/json',
+        },
+      );
     },
     async 'click [data-action=importSequence]'() {
       const definition = new AppStorage('definition');
@@ -80,29 +86,51 @@ TemplateController('EditorRoot', {
     async 'click [data-action=generate]'(e) {
       const { definition } = this.data;
       const { format } = e.target.dataset;
-      switch (format) {
-        case 'ast':
-          {
-            const ast = await compile(definition);
-            download('NoCodeSol-AST.json', ast);
-          }
-          break;
-        case 'abi':
-          alert('Not implemented');
-          break;
-        case 'sol':
-          alert('Not implemented');
-          break;
-        default:
-          alert('Not supported');
+      try {
+        const output = await compile(format, definition);
+        switch (format) {
+          case 'bin':
+            download(output, {
+              filename: 'NoCodeSol.bin',
+              type: 'text/plain',
+            });
+            break;
+          case 'ast':
+            download(output, {
+              filename: 'NoCodeSol-AST.json',
+              type: 'application/json',
+            });
+            break;
+          case 'abi':
+            download(output, {
+              filename: 'NoCodeSol.abi.json',
+              type: 'application/json',
+            });
+            break;
+          case 'sol':
+            download(output, {
+              filename: 'NoCodeSol.sol',
+              type: 'text/plain',
+            });
+            break;
+          default:
+            alert('Not supported');
+        }
+      } catch (e) {
+        alert(e.message);
       }
     },
     'click [data-action=connect]'() {
       Web3Accounts.connect();
     },
-    'click [data-action=deploy]'() {
-      const ast = await compile(definition);
-      download('NoCodeSol-AST.json', ast);
+    async 'click [data-action=deploy]'() {
+      const { definition } = this.data;
+      try {
+        const output = await compile('bin', definition);
+        //TODO: Send transaction on chain
+      } catch (e) {
+        alert(e.message);
+      }
     },
   },
   private: {},

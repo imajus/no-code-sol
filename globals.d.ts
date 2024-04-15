@@ -134,6 +134,12 @@ interface ReturnStep extends Step {
   };
 }
 
+///// Compilers
+
+interface AbstractCompiler {
+  compile(definition: MyDefinition): Promise<string>;
+}
+
 ///// Miscellaneous
 
 type RawInputData = Record<string, string>;
