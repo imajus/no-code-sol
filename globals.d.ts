@@ -18,6 +18,10 @@ type FunctionDefinition = import('solc-typed-ast').FunctionDefinition;
 type LiteralKind = import('solc-typed-ast').LiteralKind;
 type ASTNodeFactory = import('solc-typed-ast').ASTNodeFactory;
 
+///// Common
+
+type TClass<T = any> = new (...args: any[]) => T;
+
 ///// Root
 
 interface MyDefinition extends Definition {

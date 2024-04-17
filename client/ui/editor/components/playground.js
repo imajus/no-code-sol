@@ -6,6 +6,7 @@ import { executeMachine } from '/api/emulator';
 import { AppStorage } from '/api/storage';
 import { convertInputValue } from './util';
 import './input/mapping';
+import './input/msg';
 import './playground.html';
 
 export function serialize(value, type) {
@@ -57,6 +58,7 @@ TemplateController('EditorPlayground', {
   // }),
   state: {
     definition: null,
+    msg: null,
     state: null,
     func: null,
     args: null,
@@ -81,15 +83,11 @@ TemplateController('EditorPlayground', {
       });
     });
     this.autorun(() => {
-      const { /* definition, */ state, func } = this.state;
-      // Tracker.nonreactive(() => this.initArgs(definition));
-      // this.autorun(() => {
-      const { args } = this.state;
-      storage.set({ state, func, args });
+      const { msg, state, func, args } = this.state;
+      storage.set({ msg, state, func, args });
       if (func) {
         Tracker.nonreactive(() => this.execute());
       }
-      // });
     });
     designer.onDefinitionChanged.subscribe(() => {
       this.state.definition = designer.getDefinition();

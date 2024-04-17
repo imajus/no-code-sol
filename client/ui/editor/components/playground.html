@@ -4,54 +4,76 @@
     <p class="explanation">Voluptas aut perspiciatis quas mollitia tenetur officia ut ipsam. Id est qui nam natus
       dolorum quo repellat eaque. Sit vel recusandae dolorem. Voluptatem fugiat similique vero. Eos modi cumque maxime.
       Maiores quibusdam dolorum autem ex.</p>
-    {{#if state.state}}
-      <h4>State</h4>
-      {{#each item in state.state}}
-        <div class="form-group">
-          <label>{{item.name}}:</label>
-          {{#if eq item.type 'mapping(address => uint256)'}}
-            {{>EditorMappingInput value=item.value eventChange='changeState' eventChangeData=item}}
-          {{else}}
-            <input type="text" value="{{item.value}}" class="form-control" data-target="state"
-              data-name="{{item.name}}" />
-          {{/if}}
+    <div class="mb-3">
+      {{#card title='Input'}}
+        <div class="mb-2">
+          {{#collapse id='collapse-msg' title='Msg'}}
+            {{>EditorMsg value=state.msg}}
+          {{/collapse}}
         </div>
-      {{/each}}
-    {{/if}}
-    <h4>Function</h4>
-    <div class="form-group">
-      <select class="form-control" data-target="func">
-        {{#each func in functs}}
-          <option {{selectedAttr func state.func}}>{{func}}</option>
-        {{/each}}
-      </select>
+        {{#if state.state}}
+          <div class="mb-2">
+            {{#collapse id='collapse-state' title='State'}}
+              {{#each item in state.state}}
+                <div class="form-group">
+                  <label>{{item.name}}:</label>
+                  {{#if eq item.type 'mapping(address => uint256)'}}
+                    {{>EditorMappingInput value=item.value eventChange='changeState' eventChangeData=item}}
+                  {{else}}
+                    <input type="text" value="{{item.value}}" class="form-control" data-target="state"
+                      data-name="{{item.name}}" />
+                  {{/if}}
+                </div>
+              {{/each}}
+            {{/collapse}}
+          </div>
+        {{/if}}
+        <div class="mb-2">
+          {{#collapse id='collapse-func' title='Function'}}
+            <div class="form-group">
+              <select class="form-control" data-target="func">
+                {{#each func in functs}}
+                  <option {{selectedAttr func state.func}}>{{func}}</option>
+                {{/each}}
+              </select>
+            </div>
+            {{#if state.args}}
+              {{#each arg in state.args}}
+                <div class="form-group">
+                  <label>{{arg.name}}:</label>
+                  <input type="text" value="{{arg.value}}" class="form-control" data-target="args"
+                    data-index="{{@index}}" />
+                </div>
+              {{/each}}
+            {{/if}}
+          {{/collapse}}
+        </div>
+      {{/card}}
     </div>
-    {{#if state.args}}
-      <h4>Arguments</h4>
-      {{#each arg in state.args}}
-        <div class="form-group">
-          <label>{{arg.name}}:</label>
-          <input type="text" value="{{arg.value}}" class="form-control" data-target="args" data-index="{{@index}}" />
-        </div>
-      {{/each}}
-    {{/if}}
     {{#if state.func}}
-      <h4>Console</h4>
-      <ul class="list-unstyled">
-        {{#each log in state.logs}}
-          <li class="text-{{log.brand}}">{{log.message}}</li>
-        {{/each}}
-      </ul>
-      {{#each item in state.output}}
-        <div class="form-group">
-          <label>{{item.name}}:</label>
-          {{#if eq item.type 'mapping(address => uint256)'}}
-            {{>EditorMappingInput value=item.value readonly=true}}
-          {{else}}
-            <input type="text" value="{{item.value}}" class="form-control" readonly />
-          {{/if}}
-        </div>
-      {{/each}}
+      <div class="mb-3">
+        {{#card title="Console"}}
+          <ul class="list-unstyled">
+            {{#each log in state.logs}}
+              <li class="text-{{log.brand}}">{{log.message}}</li>
+            {{/each}}
+          </ul>
+        {{/card}}
+      </div>
+      <div class="mb-3">
+        {{#card title="Output"}}
+          {{#each item in state.output}}
+            <div class="form-group">
+              <label>{{item.name}}:</label>
+              {{#if eq item.type 'mapping(address => uint256)'}}
+                {{>EditorMappingInput value=item.value readonly=true}}
+              {{else}}
+                <input type="text" value="{{item.value}}" class="form-control" readonly />
+              {{/if}}
+            </div>
+          {{/each}}
+        {{/card}}
+      </div>
     {{/if}}
   </div>
 </template>

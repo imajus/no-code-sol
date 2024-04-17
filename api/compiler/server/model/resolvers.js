@@ -10,12 +10,14 @@ import { VariableStepResolver } from './step/variable';
 
 export { rootResolver } from './root';
 
-export const resolvers = new Map([
-  ['functions', FunctionsStepResolver],
-  ['argument', ArgumentStepResolver],
-  // ['mappingGetValue', mappingGetValueStepResolver],
-  // ['mappingSetValue', mappingSetValueStepResolver],
-  ['calculate', CalculateStepResolver],
-  ['return', ReturnStepResolver],
-  ['variable', VariableStepResolver],
-]);
+/**
+ * @type {Map<string, TClass<StepResolver>>}
+ */
+export const resolvers = new Map();
+resolvers.set('functions', FunctionsStepResolver);
+resolvers.set('argument', ArgumentStepResolver);
+// resolvers.set('mappingGetValue', mappingGetValueStepResolver);
+// resolvers.set('mappingSetValue', mappingSetValueStepResolver);
+resolvers.set('calculate', CalculateStepResolver);
+resolvers.set('return', ReturnStepResolver);
+resolvers.set('variable', VariableStepResolver);
