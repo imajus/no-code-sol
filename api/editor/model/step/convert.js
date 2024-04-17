@@ -8,7 +8,7 @@ export const convertValueStep = {
   name: 'Convert value',
   properties: {
     source: {
-      propertyType: 'constant',
+      propertyType: 'literal',
       type: 'uint256',
       value: '',
     },

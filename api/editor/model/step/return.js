@@ -8,7 +8,7 @@ export const returnStep = {
   name: 'Return',
   properties: {
     result: {
-      propertyType: 'constant',
+      propertyType: 'literal',
       type: 'string',
       value: '',
     },

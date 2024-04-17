@@ -27,9 +27,7 @@ TemplateController('EditorStep', {
   },
   helpers: {
     isDynamic(property) {
-      return ['variable', 'mapping', 'constant'].includes(
-        property.propertyType,
-      );
+      return ['variable', 'mapping', 'literal'].includes(property.propertyType);
     },
   },
   events: {

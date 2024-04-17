@@ -8,13 +8,13 @@ export const ifStep = {
   name: 'If',
   properties: {
     left: {
-      propertyType: 'constant',
+      propertyType: 'literal',
       type: 'boolean',
       value: 'true',
     },
     operator: '===',
     right: {
-      propertyType: 'constant',
+      propertyType: 'literal',
       type: 'boolean',
       value: 'true',
     },

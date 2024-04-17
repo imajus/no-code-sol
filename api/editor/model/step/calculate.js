@@ -8,13 +8,13 @@ export const calculateStep = {
   name: 'Calculate',
   properties: {
     left: {
-      propertyType: 'constant',
+      propertyType: 'literal',
       type: 'uint256',
       value: '',
     },
     operator: '+',
     right: {
-      propertyType: 'constant',
+      propertyType: 'literal',
       type: 'uint256',
       value: '',
     },

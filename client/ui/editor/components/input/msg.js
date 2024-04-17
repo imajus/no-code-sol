@@ -12,7 +12,7 @@ import './msg.html';
 TemplateController('EditorMsg', {
   props: new SimpleSchema(
     {
-      'value': {
+      'msg': {
         type: Object,
         blackbox: true,
       },
@@ -32,14 +32,15 @@ TemplateController('EditorMsg', {
         dataset: { target, type },
         value,
       } = e.target;
-      const { value: msg, eventChange, eventChangeData } = this.data;
-      this.triggerEvent(eventChange, {
-        ...eventChangeData,
-        value: {
-          ...msg,
-          [target]: convertInputValue(value, type),
-        },
-      });
+      const { eventChange, eventChangeData } = this.data;
+      if (eventChange) {
+        this.triggerEvent(eventChange, {
+          ...eventChangeData,
+          name: target,
+          type,
+          value,
+        });
+      }
     },
   },
 });

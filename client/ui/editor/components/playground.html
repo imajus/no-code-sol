@@ -8,7 +8,8 @@
       {{#card title='Input'}}
         <div class="mb-2">
           {{#collapse id='collapse-msg' title='Msg'}}
-            {{>EditorMsg value=state.msg}}
+            {{log state.msg}}
+            {{>EditorMsg msg=state.msg eventChange='changeMsg'}}
           {{/collapse}}
         </div>
         {{#if state.state}}

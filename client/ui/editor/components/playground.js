@@ -1,4 +1,4 @@
-import { cloneDeep } from 'lodash';
+import { cloneDeep, fromPairs } from 'lodash';
 // import SimpleSchema from 'simpl-schema';
 import { Tracker } from 'meteor/tracker';
 import { TemplateController } from 'meteor/space:template-controller';
@@ -105,6 +105,9 @@ TemplateController('EditorPlayground', {
     },
   },
   events: {
+    'changeMsg'(e, tmpl, { name, type, value }) {
+      this.updateMsg(name, type, value);
+    },
     'changeState'(e, tmpl, { name, value }) {
       this.updateState(name, value);
     },
@@ -129,7 +132,7 @@ TemplateController('EditorPlayground', {
       this.state.args = args.map((arg, i) => {
         // eslint-disable-next-line eqeqeq
         if (i == index) {
-          return { ...arg, value: convertInputValue(value, arg.type) };
+          return { ...arg, value };
         }
         return arg;
       });
@@ -145,7 +148,8 @@ TemplateController('EditorPlayground', {
       return [];
     },
     unpack(storage) {
-      const { state, func, args } = storage.get() ?? {};
+      const { msg, state, func, args } = storage.get() ?? {};
+      this.state.msg = msg ?? {};
       this.state.state = state ?? [];
       this.state.func = func ?? 'function1';
       this.state.args = args ?? [];
@@ -198,6 +202,13 @@ TemplateController('EditorPlayground', {
         }),
       );
     },
+    updateMsg(name, type, value) {
+      const { msg } = this.state;
+      this.state.msg = {
+        ...msg,
+        [name]: { type, value },
+      };
+    },
     updateState(name, value) {
       const { state } = this.state;
       this.state.state = state.map((item) => {
@@ -221,15 +232,20 @@ TemplateController('EditorPlayground', {
       }
     },
     serializeInput() {
-      const { func, state, args } = this.state;
+      const { msg, state, func, args } = this.state;
       return {
         func,
-        ...[...state, ...args].reduce(
-          (acc, { name, type, value }) => ({
-            ...acc,
-            [name]: serialize(cloneDeep(value), type),
-          }),
-          {},
+        msg: fromPairs(
+          Object.entries(msg ?? {}).map(([name, { type, value }]) => [
+            name,
+            serialize(value, type),
+          ]),
+        ),
+        ...fromPairs(
+          [...state, ...args].map(({ name, type, value }) => [
+            name,
+            serialize(cloneDeep(value), type),
+          ]),
         ),
       };
     },

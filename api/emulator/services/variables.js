@@ -90,16 +90,20 @@ export class VariablesService {
   }
 
   resolve(input) {
-    // State variable
     if ('name' in input) {
-      // Mapping
+      // Mapping access
       if ('key' in input) {
         const mapping = this.get(input.name) ?? {};
         const key = this.resolve(input.key);
         return mapping[key];
       } else {
+        // State variable
         return this.get(input.name);
       }
+    } else if ('path' in input) {
+      // Nested variable
+      const root = this.get(input.path[0]);
+      return input.path.slice(1).reduce((value, part) => value?.[part], root);
     } else {
       return convertStaticValue(input.value, input.type);
     }

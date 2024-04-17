@@ -2,7 +2,6 @@ import { isEmpty, isEqual, isEqualWith } from 'lodash';
 import SimpleSchema from 'simpl-schema';
 import { Tracker } from 'meteor/tracker';
 import { TemplateController } from 'meteor/space:template-controller';
-import { convertInputValue } from '../util';
 import './mapping.html';
 
 TemplateController('EditorMappingInput', {

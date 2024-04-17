@@ -66,13 +66,21 @@ export class AbstractStepResolver {
     switch (input.propertyType) {
       case 'variable':
         return this.factory.makeIdentifier(undefined, input.name, undefined);
+      case 'nested':
+        //TODO: Support more than 2 levels of nesting
+        return this.factory.makeMemberAccess(
+          undefined,
+          this.factory.makeIdentifier(undefined, input.path[0], undefined),
+          input.path[1],
+          undefined,
+        );
       case 'mapping':
         return this.factory.makeIndexAccess(
-          undefined, // type,
+          undefined,
           this.factory.makeIdentifier(undefined, input.name, undefined),
           this.dynamic(input.key),
         );
-      case 'constant': {
+      case 'literal': {
         const kind = variableTypeToLiteralKind(input.type);
         return this.factory.makeLiteral(
           undefined,
@@ -82,7 +90,7 @@ export class AbstractStepResolver {
         );
       }
       default:
-        throw new Error('Not supported');
+        throw new Error(`Unsupported property type: ${input.propertyType}`);
     }
   }
 }

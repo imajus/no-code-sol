@@ -8,18 +8,18 @@ export const loopStep = {
   name: 'Loop',
   properties: {
     from: {
-      propertyType: 'constant',
+      propertyType: 'literal',
       type: 'uint256',
       value: '0',
     },
     operator: '<',
     to: {
-      propertyType: 'constant',
+      propertyType: 'literal',
       type: 'uint256',
       value: '2',
     },
     increment: {
-      propertyType: 'constant',
+      propertyType: 'literal',
       type: 'uint256',
       value: '1',
     },

@@ -1,26 +1,28 @@
 <template name="EditorMsg">
-  <div class="form-group">
-    <label>Calldata:</label>
-    <input type="text" value="{{value.calldata}}" class="form-control" data-target="calldata" data-type="string">
-  </div>
-  <div class="form-group">
-    <label>Gas:</label>
-    <input type="number" value="{{value.gas}}" class="form-control" data-target="gas" data-type="uint256">
-  </div>
-  <div class="form-group">
-    <label>Sender:</label>
-    <input type="text" value="{{value.sender}}" class="form-control" data-target="sender" data-type="address">
-  </div>
-  {{!-- <div class="form-group">
+  <div>
+    <div class="form-group">
+      <label>Calldata:</label>
+      <input type="text" value="{{msg.calldata.value}}" class="form-control" data-target="calldata" data-type="string">
+    </div>
+    <div class="form-group">
+      <label>Gas:</label>
+      <input type="number" value="{{msg.gas.value}}" class="form-control" data-target="gas" data-type="uint256">
+    </div>
+    <div class="form-group">
+      <label>Sender:</label>
+      <input type="text" value="{{msg.sender.value}}" class="form-control" data-target="sender" data-type="address">
+    </div>
+    {{!-- <div class="form-group">
     <label>Signature</label>
     <input type="text" value="" class="form-control" data-target="sig">
   </div> --}}
-  <div class="form-group">
-    <label>Value:</label>
-    <div class="input-group">
-      <input type="number" value="{{value.value}}" class="form-control" data-target="value" data-type="uint256">
-      <div class="input-group-append">
-        <span class="input-group-text">GWEI</span>
+    <div class="form-group">
+      <label>Value:</label>
+      <div class="input-group">
+        <input type="number" value="{{msg.value.value}}" class="form-control" data-target="value" data-type="uint256">
+        <div class="input-group-append">
+          <span class="input-group-text">GWEI</span>
+        </div>
       </div>
     </div>
   </div>

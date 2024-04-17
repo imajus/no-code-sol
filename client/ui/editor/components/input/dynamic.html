@@ -6,10 +6,10 @@
         <div class="input-group-prepend">
           <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown"
             aria-expanded="false">
-            {{#if isVariable}}
+            {{#if or isVariable isMapping}}
               <i class="fa fa-usd fa-fw"></i>
-            {{else if isMapping}}
-              <i class="fa fa-th-list fa-fw"></i>
+              {{!-- {{else if isMapping}}
+              <i class="fa fa-th-list fa-fw"></i> --}}
             {{else if isConstant}}
               <i class="fa fa-window-minimize fa-fw"></i>
             {{else}}
@@ -17,13 +17,9 @@
             {{/if}}
           </button>
           <div class="dropdown-menu">
-            {{#unless isVariable}}
+            {{#unless or isVariable isMapping}}
               <a class="dropdown-item" href="#" data-action="changeType" data-target="property" data-type="variable"><i
                   class="fa fa-usd fa-fw"></i> Variable</a>
-            {{/unless}}
-            {{#unless isMapping}}
-              <a class="dropdown-item" href="#" data-action="changeType" data-target="property" data-type="mapping"><i
-                  class="fa fa-th-list fa-fw"></i> Mapping</a>
             {{/unless}}
             {{#unless isConstant}}
               <a class="dropdown-item" href="#" data-action="changeType" data-target="property" data-type="constant"><i
@@ -31,42 +27,8 @@
             {{/unless}}
           </div>
         </div>
-        {{#if or isVariable isMapping}}
-          <input type="text" class="form-control" value="{{property.name}}" data-target="property" />
-        {{else if isConstant}}
-          <input type="text" class="form-control" value="{{property.value}}" data-target="property" />
-        {{/if}}
+        <input type="text" class="form-control" value="{{value}}" data-target="property" />
       </div>
     </div>
-    {{#if isMapping}}
-      <div class="form-group">
-        <div class="input-group">
-          <div class="input-group-prepend">
-            <span class="input-group-text">key</span>
-            <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown"
-              aria-expanded="false">
-              {{#if eq property.key.propertyType 'variable'}}
-                <i class="fa fa-usd fa-fw"></i>
-              {{else if eq property.key.propertyType 'constant'}}
-                <i class="fa fa-window-minimize fa-fw"></i>
-              {{else}}
-                ?
-              {{/if}}
-            </button>
-            <div class="dropdown-menu">
-              <a class="dropdown-item" href="#" data-action="changeType" data-target="key" data-type="variable"><i
-                  class="fa fa-usd fa-fw"></i> Variable</a>
-              <a class="dropdown-item" href="#" data-action="changeType" data-target="key" data-type="constant"><i
-                  class="fa fa-window-minimize fa-fw"></i> Literal</a>
-            </div>
-          </div>
-          {{#if eq property.key.propertyType 'variable'}}
-            <input type="text" class="form-control" value="{{property.key.name}}" data-target="key" />
-          {{else if eq property.key.propertyType 'constant'}}
-            <input type="text" class="form-control" value="{{property.key.value}}" data-target="key" />
-          {{/if}}
-        </div>
-      </div>
-    {{/if}}
   </div>
 </template>

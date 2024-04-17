@@ -35,18 +35,23 @@ type ValueTypeName =
   | 'uint256'
   | 'mapping(address => uint256)';
 
+interface NestedVariableValue {
+  propertyType: 'nested';
+  path: string[];
+}
+
 interface VariableValue {
   propertyType: 'variable';
   name: string;
 }
 
-interface MappingValue extends VariableValue {
+interface MappingAccessValue extends VariableValue {
   propertyType: 'mapping';
   key: DynamicValue;
 }
 
-interface ConstantValue {
-  propertyType: 'constant';
+interface LiteralValue {
+  propertyType: 'literal';
   type: ValueTypeName;
   value: string;
 }
@@ -61,7 +66,11 @@ interface TypeValue {
   value: ValueTypeName;
 }
 
-type DynamicValue = VariableValue | MappingValue | ConstantValue;
+type DynamicValue =
+  | VariableValue
+  | NestedVariableValue
+  | MappingAccessValue
+  | LiteralValue;
 
 ///// Services
 
@@ -70,7 +79,7 @@ interface IVariableService {
   typeOf(name: string): ValueTypeName;
   get(name: String): any;
   resolve(input: DynamicValue): any;
-  set(input: string | VariableValue | MappingValue, value: any): void;
+  set(input: string | VariableValue | MappingAccessValue, value: any): void;
   isSet(name: string): boolean;
   delete(name: string): void;
   format(pattern: String): string;
@@ -108,7 +117,7 @@ interface CalculateStep extends Step {
     left: DynamicValue;
     operator: string;
     right: DynamicValue;
-    result: VariableValue | MappingValue;
+    result: VariableValue | MappingAccessValue;
   };
 }
 
