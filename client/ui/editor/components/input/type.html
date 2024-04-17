@@ -1,7 +1,10 @@
 <template name="EditorTypeInput">
-  <select value="{{property.value}}" class="form-control">
-    {{#each type in types}}
-      <option {{typeAtts type}}>{{type}}</option>
-    {{/each}}
-  </select>
+  <div class="form-group">
+    <label>{{name}}:</label>
+    <select value="{{property.value}}" class="form-control">
+      {{#each type in types}}
+        <option {{typeAtts type}}>{{type}}</option>
+      {{/each}}
+    </select>
+  </div>
 </template>

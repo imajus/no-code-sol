@@ -1,3 +1,4 @@
+import { Tracker } from 'meteor/tracker';
 import { TemplateController } from 'meteor/space:template-controller';
 import '../input/dynamic';
 import '../input/type';
@@ -12,14 +13,19 @@ TemplateController('EditorStep', {
   //   onChangeName: Function,
   //   onChangeProperty: Function,
   // }),
-  helpers: {
-    properties() {
-      const { step } = this.data;
-      return Object.entries(step.properties).map(([name, property]) => ({
+  state: {
+    properties: null,
+  },
+  onCreated() {
+    const { step } = this.data;
+    this.state.properties = Object.entries(step.properties).map(
+      ([name, property]) => ({
         name,
         property,
-      }));
-    },
+      }),
+    );
+  },
+  helpers: {
     isDynamic(property) {
       return ['variable', 'mapping', 'constant'].includes(
         property.propertyType,
@@ -32,20 +38,29 @@ TemplateController('EditorStep', {
       onChangeName(e.target.value.trim());
     },
     'change [data-target=prop]'(e) {
-      const { onChangeProperty } = this.data;
       const {
         dataset: { prop },
       } = e.target;
-      onChangeProperty(prop, e.target.value.trim());
+      this.updateProperty(prop, e.target.value.trim());
     },
     'changeType'(e, tmpl, { name, value }) {
-      const { onChangeProperty } = this.data;
-      onChangeProperty(name, { propertyType: 'type', value });
+      this.updateProperty(name, { propertyType: 'type', value });
     },
     'changeDynamic'(e, tmpl, { name, value }) {
+      this.updateProperty(name, value);
+    },
+  },
+  private: {
+    updateProperty(name, value) {
       const { onChangeProperty } = this.data;
+      const properties = Tracker.nonreactive(() => this.state.properties);
+      this.state.properties = properties.map((item) => {
+        if (item.name === name) {
+          return { name, property: value };
+        }
+        return item;
+      });
       onChangeProperty(name, value);
     },
   },
-  private: {},
 });

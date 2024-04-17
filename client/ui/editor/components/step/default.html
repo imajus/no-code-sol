@@ -1,21 +1,15 @@
 <template name="EditorStep">
   <div class="px-3">
     <h3>Edit {{step.type}}</h3>
-    <div class="form-group">
+    {{!-- <div class="form-group">
       <label>Name:</label>
       <input type="text" value="{{step.name}}" class="form-control" data-target="name" />
-    </div>
-    {{#each properties}}
+    </div> --}}
+    {{#each state.properties}}
       {{#if eq property.propertyType 'type'}}
-        <div class="form-group">
-          <label>{{name}}:</label>
-          {{>EditorTypeInput name=name value=property.value eventChange='changeType'}}
-        </div>
+        {{>EditorTypeInput name=name value=property.value eventChange='changeType'}}
       {{else if isDynamic property}}
-        <div class="form-group">
-          <label>{{name}}:</label>
-          {{>EditorDynamicValue name=name property=property eventChange='changeDynamic'}}
-        </div>
+        {{>EditorDynamicValue name=name property=property eventChange='changeDynamic'}}
       {{else}}
         <div class="form-group">
           <label>{{name}}:</label>

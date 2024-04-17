@@ -27,3 +27,7 @@ body {
 	overflow: auto;
 	background: white;
 }
+
+@import './designer.css';
+@import './designer-light.css';
+@import '{}/node_modules/bootstrap/scss/bootstrap';

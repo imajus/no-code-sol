@@ -39,13 +39,6 @@ export class AbstractStepResolver {
   }
 
   /**
-   * @abstract
-   */
-  resolve(step, index, parent) {
-    throw new Error('Not implemented');
-  }
-
-  /**
    * @param {ValueTypeName} type
    * @returns {TypeName}
    */
