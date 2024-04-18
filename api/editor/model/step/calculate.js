@@ -30,7 +30,7 @@ export const calculateStep = {
     },
     result: {
       propertyType: 'variable',
-      name: 'uint256',
+      name: '',
     },
   },
 };
