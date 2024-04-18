@@ -34,17 +34,21 @@ if (Meteor.isServer) {
      * @param {MyDefinition} definition
      * @returns
      */
-    'Compiler.compile'(format, definition) {
-      check(format, String);
-      check(
-        definition,
-        Match.ObjectIncluding({
-          sequence: [Object],
-          properties: Object,
-        }),
-      );
-      const wrapper = new WrapperCompiler(format);
-      return wrapper.compile(definition);
+    async 'Compiler.compile'(format, definition) {
+      try {
+        check(format, String);
+        check(
+          definition,
+          Match.ObjectIncluding({
+            sequence: [Object],
+            properties: Object,
+          }),
+        );
+        const wrapper = new WrapperCompiler(format);
+        return await wrapper.compile(definition);
+      } catch (err) {
+        throw new Meteor.Error(500, err.message);
+      }
     },
   });
 }

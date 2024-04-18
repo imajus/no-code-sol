@@ -18,9 +18,9 @@ export class VariableStepResolver extends AbstractStepResolver {
       undefined,
       true,
       DataLocation.Default,
-      StateVariableVisibility.Internal,
+      StateVariableVisibility.Public,
       Mutability.Mutable,
-      step.properties.type.value,
+      undefined,
       undefined,
       this.resolveType(step.properties.type.value),
     );

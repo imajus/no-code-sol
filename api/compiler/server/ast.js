@@ -1,5 +1,7 @@
 import { DefinitionWalker } from 'sequential-workflow-designer';
+import { compile, CompilationOutput, CompilerKind } from 'solc-typed-ast';
 import { AbstractCompiler } from './abstract';
+import { SolidityCompiler } from './sol';
 
 /**
  * @implements {AbstractCompiler}
@@ -8,7 +10,30 @@ export class AbstractSyntaxTreeCompiler extends AbstractCompiler {
   walker = new DefinitionWalker();
 
   async compile(definition) {
-    const units = this.units();
-    throw new Error('Not implemented');
+    const solidity = new SolidityCompiler();
+    const source = await solidity.compile(definition);
+    const bytes = new TextEncoder().encode(source);
+    const { errors, sources, ...other } = await compile(
+      new Map([['BasicToken.sol', bytes]]),
+      [],
+      '0.8.25',
+      [CompilationOutput.AST],
+      {},
+      CompilerKind.Native,
+    );
+    if (errors) {
+      const panic = errors.find((e) => e.severity === 'error');
+      for (const error of errors) {
+        if (error.severity === 'error') {
+          console.error(error.formattedMessage);
+        } else {
+          console.warn(error.formattedMessage);
+        }
+      }
+      if (panic) {
+        throw new Error(`${panic.type}: ${panic.message}`);
+      }
+    }
+    return JSON.stringify({ sources, errors });
   }
 }

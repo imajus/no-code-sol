@@ -12,5 +12,9 @@ export const returnStep = {
       type: 'string',
       value: '',
     },
+    type: {
+      propertyType: 'type',
+      value: 'string',
+    },
   },
 };

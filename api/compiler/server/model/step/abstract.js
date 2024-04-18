@@ -61,6 +61,7 @@ export class AbstractStepResolver {
 
   /***
    * @param {DynamicValue} input
+   * @returns {Identifier|MemberAccess|IndexAccess|Literal}
    */
   dynamic(input) {
     switch (input.propertyType) {

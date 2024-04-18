@@ -1,5 +1,8 @@
 {
   "extends": "@majus/eslint-config-meteor",
+  "rules": {
+    "meteor/no-session": false
+  },
   "globals": {
     "BigInt": "readonly"
   }

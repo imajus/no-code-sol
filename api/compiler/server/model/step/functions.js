@@ -2,6 +2,7 @@ import {
   FunctionKind,
   FunctionVisibility,
   FunctionStateMutability,
+  ModifierInvocation,
 } from 'solc-typed-ast';
 import { AbstractStepResolver } from './abstract';
 

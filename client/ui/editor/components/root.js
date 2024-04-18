@@ -1,7 +1,8 @@
 // import SimpleSchema from 'simpl-schema';
+import { ethers } from 'ethers';
 import { TemplateController } from 'meteor/space:template-controller';
 import { Session } from 'meteor/session';
-import { Web3Accounts } from 'meteor/majus:web3';
+import { Web3Accounts, Web3Factory } from 'meteor/majus:web3';
 import { AppStorage } from '/api/storage';
 import { compile } from '/api/compiler';
 import './root.html';
@@ -132,8 +133,23 @@ TemplateController('EditorRoot', {
     async 'click [data-action=deploy]'() {
       const { definition } = this.data;
       try {
-        const output = await compile('bin', definition);
-        //TODO: Send transaction on chain
+        // const provider = new ethers.providers.Web3Provider(window.ethereum, 'any');
+        // const signer = provider.getSigner();
+        // const provider = Web3Factory.provider();
+        const signer = Web3Factory.signer();
+        const bytecode = await compile('bin', definition);
+        const abi = await compile('abi', definition);
+        const factory = new ethers.ContractFactory(abi, bytecode, signer);
+        // Set gas limit and gas price, using the default Ropsten provider
+        // const price = ethers.utils.formatUnits(
+        //   await provider.getGasPrice(),
+        //   'gwei',
+        // );
+        const contract = await factory.deploy(/* {
+          gasLimit: 300000,
+          gasPrice: ethers.utils.parseUnits(price, 'gwei'),
+        } */);
+        alert(`Smart contract deployed at ${contract.address}`);
       } catch (e) {
         alert(e.message);
       }

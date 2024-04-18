@@ -17,6 +17,10 @@ type ContractDefinition = import('solc-typed-ast').ContractDefinition;
 type FunctionDefinition = import('solc-typed-ast').FunctionDefinition;
 type LiteralKind = import('solc-typed-ast').LiteralKind;
 type ASTNodeFactory = import('solc-typed-ast').ASTNodeFactory;
+type Identifier = import('solc-typed-ast').Identifier;
+type MemberAccess = import('solc-typed-ast').MemberAccess;
+type IndexAccess = import('solc-typed-ast').IndexAccess;
+type Literal = import('solc-typed-ast').Literal;
 
 ///// Common
 
@@ -205,6 +209,7 @@ interface ReturnStep extends Step {
   componentType: 'task';
   properties: {
     result: DynamicValue;
+    type: TypeValue;
   };
 }
 

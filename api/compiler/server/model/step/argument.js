@@ -14,7 +14,7 @@ export class ArgumentStepResolver extends AbstractStepResolver {
     const node = this.factory.makeVariableDeclaration(
       false,
       false,
-      'recipient',
+      step.properties.name,
       undefined,
       false,
       DataLocation.Default,
