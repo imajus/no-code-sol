@@ -2,6 +2,7 @@ import { Tracker } from 'meteor/tracker';
 import { TemplateController } from 'meteor/space:template-controller';
 import '../input/dynamic';
 import '../input/type';
+import '../input/string';
 import './default.html';
 
 TemplateController('EditorStep', {
@@ -43,6 +44,9 @@ TemplateController('EditorStep', {
     },
     'changeType'(e, tmpl, { name, value }) {
       this.updateProperty(name, { propertyType: 'type', value });
+    },
+    'changeString'(e, tmpl, { name, value }) {
+      this.updateProperty(name, value);
     },
     'changeDynamic'(e, tmpl, { name, value }) {
       this.updateProperty(name, value);

@@ -1,5 +1,6 @@
 import SimpleSchema from 'simpl-schema';
 import { TemplateController } from 'meteor/space:template-controller';
+import '/client/ui/components/tooltip';
 import './dynamic.html';
 
 /**

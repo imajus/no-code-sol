@@ -38,6 +38,6 @@ export const calculateActivity = createAtomActivityFromHandler(
     }
     const a = $variables.resolve(left);
     const b = $variables.resolve(right);
-    $variables.set(result, calculate(a, b, operator));
+    $variables.set(result, calculate(a, b, operator.value));
   },
 );

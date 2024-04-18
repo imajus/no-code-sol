@@ -8,6 +8,8 @@
     {{#each state.properties}}
       {{#if eq property.propertyType 'type'}}
         {{>EditorTypeInput name=name value=property.value eventChange='changeType'}}
+      {{else if eq property.propertyType 'string'}}
+        {{>EditorStringInput name=name value=property.value options=property.options eventChange='changeString'}}
       {{else if isDynamic property}}
         {{>EditorDynamicValue name=name property=property eventChange='changeDynamic'}}
       {{else}}

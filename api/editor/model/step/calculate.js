@@ -12,7 +12,17 @@ export const calculateStep = {
       type: 'uint256',
       value: '',
     },
-    operator: '+',
+    operator: {
+      propertyType: 'string',
+      value: '+',
+      options: {
+        '+': 'addition (+)',
+        '-': 'subtraction (-)',
+        '*': 'multiplication (*)',
+        '/': 'division (/)',
+        '%': 'remainder (%)',
+      },
+    },
     right: {
       propertyType: 'literal',
       type: 'uint256',

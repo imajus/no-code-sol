@@ -1,0 +1,14 @@
+<template name="EditorStringInput">
+  <div class="form-group">
+    <label>{{name}}:</label>
+    {{#if props.options}}
+      <select value="{{value}}" class="form-control">
+        {{#each options}}
+          <option value="{{value}}" {{optionAtts value}}>{{label}}</option>
+        {{/each}}
+      </select>
+    {{else}}
+      <input type="text" value="{{value}}" class="form-control" />
+    {{/if}}
+  </div>
+</template>

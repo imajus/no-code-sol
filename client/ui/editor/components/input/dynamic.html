@@ -1,34 +1,20 @@
 <template name="EditorDynamicValue">
   <div>
     <div class="form-group">
-      <label>{{name}}:</label>
-      <div class="input-group">
-        <div class="input-group-prepend">
-          <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-toggle="dropdown"
-            aria-expanded="false">
-            {{#if or isVariable isMapping}}
-              <i class="fa fa-usd fa-fw"></i>
-              {{!-- {{else if isMapping}}
-              <i class="fa fa-th-list fa-fw"></i> --}}
-            {{else if isConstant}}
-              <i class="fa fa-window-minimize fa-fw"></i>
-            {{else}}
-              ?
-            {{/if}}
-          </button>
-          <div class="dropdown-menu">
-            {{#unless or isVariable isMapping}}
-              <a class="dropdown-item" href="#" data-action="changeType" data-target="property" data-type="variable"><i
-                  class="fa fa-usd fa-fw"></i> Variable</a>
-            {{/unless}}
-            {{#unless isConstant}}
-              <a class="dropdown-item" href="#" data-action="changeType" data-target="property" data-type="constant"><i
-                  class="fa fa-window-minimize fa-fw"></i> Literal</a>
-            {{/unless}}
+      <label>
+        {{name}}:
+        {{#tooltip classes="text-left"}}
+          <div class="text-left text-nowrap">
+            Examples:<br />
+            <strong>var</strong>: Variable value<br>
+            <strong>map[key]</strong>: Mapping value<br>
+            <strong>msg.sender</strong>: Object field<br>
+            <strong>100</strong>: Integer<br>
+            <strong>"hello"</strong>: String literal<br>
           </div>
-        </div>
-        <input type="text" class="form-control" value="{{value}}" data-target="property" />
-      </div>
+        {{/tooltip}}
+      </label>
+      <input type="text" class="form-control" value="{{value}}" data-target="property" />
     </div>
   </div>
 </template>

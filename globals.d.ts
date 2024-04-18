@@ -59,6 +59,7 @@ interface LiteralValue {
 interface StringValue {
   propertyType: 'string';
   value: string;
+  options?: string[] | Record<string, string>;
 }
 
 interface TypeValue {
@@ -115,7 +116,7 @@ interface CalculateStep extends Step {
   componentType: 'task';
   properties: {
     left: DynamicValue;
-    operator: string;
+    operator: StringValue;
     right: DynamicValue;
     result: VariableValue | MappingAccessValue;
   };
