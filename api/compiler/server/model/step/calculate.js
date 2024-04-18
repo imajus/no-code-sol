@@ -11,7 +11,7 @@ export class CalculateStepResolver extends AbstractStepResolver {
     const result = this.dynamic(step.properties.result);
     const operation = this.factory.makeBinaryOperation(
       undefined,
-      step.properties.operator,
+      step.properties.operator.value,
       left,
       right,
     );
