@@ -12,6 +12,7 @@ import {
   rootEditorProvider,
   defaultStepEditorProvider,
   variableStep,
+  variableStepEditorProvider,
   returnStep,
   argumentStep,
 } from './model';
@@ -31,6 +32,9 @@ export function createDesigner(placeholder, walker, definition) {
         switch (step.type) {
           case 'functions':
             return functionsStepEditorProvider(step, context);
+          case 'argument':
+          case 'variable':
+            return variableStepEditorProvider(step, context);
           default:
             return defaultStepEditorProvider(step, context);
         }
@@ -47,8 +51,8 @@ export function createDesigner(placeholder, walker, definition) {
     },
     steps: {
       iconUrlProvider: () => '/assets/icon-task.svg',
-      isDeletable: ({ type }) => type !== 'functions',
-      isDraggable: ({ type }) => type !== 'functions',
+      // isDeletable: ({ type }) => type !== 'functions',
+      // isDraggable: ({ type }) => type !== 'functions',
     },
     toolbox: {
       groups: [

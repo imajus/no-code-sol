@@ -1,4 +1,4 @@
-import { cloneDeep, fromPairs } from 'lodash';
+import { cloneDeep, fromPairs, isEmpty } from 'lodash';
 // import SimpleSchema from 'simpl-schema';
 import { Tracker } from 'meteor/tracker';
 import { TemplateController } from 'meteor/space:template-controller';
@@ -45,6 +45,19 @@ export function deserialize(value, type) {
   }
 }
 
+function deepEqual(left, right) {
+  return JSON.stringify(left) === JSON.stringify(right);
+}
+
+function maybeUpdateArrayItem(arr, callback) {
+  const tmp = (arr ?? []).map(callback);
+  if (!deepEqual(arr, tmp)) {
+    return tmp;
+  }
+  // No change
+  return arr;
+}
+
 TemplateController('EditorPlayground', {
   // props: new SimpleSchema({
   //   'designer': {
@@ -71,16 +84,16 @@ TemplateController('EditorPlayground', {
     const storage = new AppStorage('input');
     this.unpack(storage);
     this.autorun(() => {
+      const { func } = this.state;
+      const functs = this.functs();
+      if (!functs.includes(func)) {
+        [this.state.func] = functs;
+      }
+    });
+    this.autorun(() => {
       const { definition } = this.state;
-      Tracker.nonreactive(() => {
-        const { func } = this.state;
-        const functs = this.functs();
-        this.initState(definition);
-        this.initArgs(definition);
-        if (!functs.includes(func)) {
-          [this.state.func] = functs;
-        }
-      });
+      this.initState(definition);
+      this.initArgs(definition);
     });
     this.autorun(() => {
       const { msg, state, func, args } = this.state;
@@ -194,13 +207,14 @@ TemplateController('EditorPlayground', {
     },
     initState(definition) {
       const { state } = this.state;
-      this.state.state = this.extractVariables(definition).map(
-        ({ name, type }) => ({
-          name,
-          type: type.value,
-          value: state.find((item) => item.name === name)?.value,
-        }),
-      );
+      const tmp = this.extractVariables(definition).map(({ name, type }) => ({
+        name,
+        type: type.value,
+        value: state.find((item) => item.name === name)?.value,
+      }));
+      if (!deepEqual(state, tmp)) {
+        this.state.state = tmp;
+      }
     },
     updateMsg(name, type, value) {
       const { msg } = this.state;
@@ -220,15 +234,17 @@ TemplateController('EditorPlayground', {
     },
     initArgs(definition) {
       const { func, args } = this.state;
-      this.state.args = [];
       if (func) {
-        this.state.args = this.extractArguments(definition).map(
-          ({ name, type }) => ({
-            name,
-            type: type.value,
-            value: args.find((arg) => arg.name === name)?.value,
-          }),
-        );
+        const tmp = this.extractArguments(definition).map(({ name, type }) => ({
+          name,
+          type: type.value,
+          value: args.find((arg) => arg.name === name)?.value,
+        }));
+        if (!deepEqual(args, tmp)) {
+          this.state.args = tmp;
+        }
+      } else if (!isEmpty(args)) {
+        this.state.args = [];
       }
     },
     serializeInput() {

@@ -6,7 +6,7 @@ export { ifStep } from './step/if';
 export { loopStep } from './step/loop';
 // export { mappingGetValueStep, mappingSetValueStep } from './step/mapping';
 export { functionsStep, functionsStepEditorProvider } from './step/functions';
-export { variableStep } from './step/variable';
+export { variableStep, variableStepEditorProvider } from './step/variable';
 export { returnStep } from './step/return';
 export { rootEditorProvider, defaultStepEditorProvider } from './provider';
 export { argumentStep } from './step/argument';

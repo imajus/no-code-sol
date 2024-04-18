@@ -1,0 +1,9 @@
+<template name="EditorVariableStep">
+  <div class="px-3">
+    <div class="form-group">
+      <label>name:</label>
+      <input type="text" value="{{step.properties.name}}" class="form-control" data-target="name" />
+    </div>
+    {{>EditorTypeInput name='type' value=step.properties.type.value eventChange='changeType'}}
+  </div>
+</template>

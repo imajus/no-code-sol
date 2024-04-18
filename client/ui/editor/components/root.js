@@ -1,9 +1,12 @@
 // import SimpleSchema from 'simpl-schema';
 import { TemplateController } from 'meteor/space:template-controller';
+import { Session } from 'meteor/session';
 import { Web3Accounts } from 'meteor/majus:web3';
 import { AppStorage } from '/api/storage';
 import { compile } from '/api/compiler';
 import './root.html';
+
+Session.setDefault('playground', false);
 
 function download(data, { filename, type }) {
   const blob = new Blob([data], { type });
@@ -49,6 +52,9 @@ TemplateController('EditorRoot', {
   onRendered() {},
   helpers: {},
   events: {
+    'click [data-action=togglePlayground]'() {
+      Session.set('playground', !Session.get('playground'));
+    },
     'click [data-action=exportSequence]'() {
       const definition = new AppStorage('definition');
       const input = new AppStorage('input');
