@@ -1,6 +1,20 @@
 <template name="Home">
-  <div id="designer"></div>
-  {{#if showPlayground}}
-    {{>EditorPlayground designer=state.designer walker=state.walker}}
-  {{/if}}
+  <div class="container-sm mt-5">
+    <div class="jumbotron mt-5">
+      <h1 class="display-4">Hi, I am <a href="/">NoCodeSol</a></h1>
+      <p class="lead">Visual sequential workflow design tool for building Solidity Smart Contracts with no actual
+        Solidity syntax knowledge required.</p>
+      <hr class="my-4">
+      <p>The tool is great for prototyping ideas because of low initial learning curve and general convenience of
+        ready-to-use web based solution. The additional steps like setting up a local development environment and
+        deployment infrastructure are essentially put aside. </p>
+      <p>You could just open a web page, design a desired Smart Contract logic and then export the result in a
+        form of Solidity/ABI/AST/Bytecode files or deploy to EVM compatible blockchain directly from the browser.</p>
+      <p>The proof-of-concept implementation allows to create Smart Contracts with multiple functions and custom logic
+        involving a (yet) limited set of operations.</p>
+      <div class="text-center">
+        <a class="btn btn-primary btn-lg" href="{{pathFor 'Design'}}" role="button">Design your Smart Contract</a>
+      </div>
+    </div>
+  </div>
 </template>

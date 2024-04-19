@@ -1,0 +1,6 @@
+<template name="Design">
+  <div id="designer"></div>
+  {{#if showPlayground}}
+    {{>EditorPlayground designer=state.designer walker=state.walker}}
+  {{/if}}
+</template>
