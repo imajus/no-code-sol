@@ -2,6 +2,15 @@ import SimpleSchema from 'simpl-schema';
 import { TemplateController } from 'meteor/space:template-controller';
 import './functions.html';
 
+function guessFunctionName(branches) {
+  for (let i = 1; ; i++) {
+    const name = `func${branches.length + i}`;
+    if (!branches.includes(name)) {
+      return name;
+    }
+  }
+}
+
 TemplateController('EditorFunctionsStep', {
   props: new SimpleSchema({
     'onAdd': Function,
@@ -35,16 +44,18 @@ TemplateController('EditorFunctionsStep', {
     'click [data-action=deleteFunc]'(e) {
       const { branch } = e.currentTarget.dataset;
       const { branches } = this.state;
+      if (branches.length === 1) {
+        alert('Cannot delete last function');
+        return;
+      }
       this.state.branches = branches.filter((name) => name !== branch);
       this.props.onDelete(branch);
     },
     'click [data-action=addFunc]'() {
-      const name = window.prompt('Enter function name');
-      if (name) {
-        const { branches } = this.state;
-        this.state.branches = [...branches, name];
-        this.props.onAdd(name);
-      }
+      const { branches } = this.state;
+      const name = guessFunctionName(branches);
+      this.state.branches = [...branches, name];
+      this.props.onAdd(name);
     },
   },
 });

@@ -1,3 +1,4 @@
+import { isEqual, map } from 'lodash';
 import { Designer } from 'sequential-workflow-designer';
 import {
   logStep,
@@ -15,6 +16,10 @@ import {
   argumentStep,
 } from './model';
 
+function isSameSequence(a, b) {
+  return isEqual(map(a, 'id'), map(b, 'id'));
+}
+
 /**
  *
  * @param {HTMLElement} placeholder
@@ -22,7 +27,7 @@ import {
  * @param {MyDefinition} definition
  */
 export function createDesigner(placeholder, walker, definition) {
-  return Designer.create(placeholder, definition, {
+  const designer = Designer.create(placeholder, definition, {
     controlBar: true,
     editors: {
       rootEditorProvider,
@@ -48,9 +53,34 @@ export function createDesigner(placeholder, walker, definition) {
       root: () => true,
     },
     steps: {
-      iconUrlProvider: (componentType, type) => `/assets/step/${type}.svg`,
+      canInsertStep(step, sequence, index) {
+        const { sequence: root } = designer.getDefinition();
+        switch (step.type) {
+          case 'functions':
+            return (
+              isSameSequence(sequence, root) &&
+              sequence.every(({ type }) => type !== 'functions')
+            );
+          case 'argument': {
+            const func = root.find(({ type }) => type === 'functions');
+            return (
+              func &&
+              Object.values(func.branches).some((branch) => {
+                return isSameSequence(branch, sequence);
+              })
+            );
+          }
+          default:
+            return true;
+        }
+      },
+      canMoveStep(source, step, target, index) {
+        return true;
+      },
+      isDuplicable: () => false,
       // isDeletable: ({ type }) => type !== 'functions',
       // isDraggable: ({ type }) => type !== 'functions',
+      iconUrlProvider: (componentType, type) => `/assets/step/${type}.svg`,
     },
     toolbox: {
       groups: [
@@ -78,4 +108,5 @@ export function createDesigner(placeholder, walker, definition) {
     // undoStackSize: 10,
     definitionWalker: walker,
   });
+  return designer;
 }

@@ -3,13 +3,14 @@
     <h3>Functions</h3>
     {{#each branch in state.branches}}
       <div class="form-group">
-        <label for="branch-{{@index}}">Function {{sum @index 1}}:</label>
-        <input type="text" id="branch-{{@index}}" value="{{branch}}" class="form-control" data-target="func"
-          data-branch="{{branch}}" />
-      </div>
-      <div class="form-group">
-        <button class="btn btn-outline-danger btn-sm btn-block" data-action="deleteFunc" data-branch="{{branch}}">Delete
-          function</button>
+        <div class="input-group">
+          <input type="text" id="branch-{{@index}}" value="{{branch}}" class="form-control" data-target="func"
+            data-branch="{{branch}}" />
+          <div class="input-group-append">
+            <button class="btn btn-outline-danger btn-sm btn-block" data-action="deleteFunc"
+              data-branch="{{branch}}">Delete</button>
+          </div>
+        </div>
       </div>
     {{/each}}
     <button class="btn btn-primary btn-sm btn-outline btn-block" data-action="addFunc">Add
