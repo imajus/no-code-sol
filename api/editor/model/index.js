@@ -4,7 +4,6 @@ export { calculateStep } from './step/calculate';
 export { convertValueStep } from './step/convert';
 export { ifStep } from './step/if';
 export { loopStep } from './step/loop';
-// export { mappingGetValueStep, mappingSetValueStep } from './step/mapping';
 export { functionsStep, functionsStepEditorProvider } from './step/functions';
 export { variableStep, variableStepEditorProvider } from './step/variable';
 export { returnStep } from './step/return';

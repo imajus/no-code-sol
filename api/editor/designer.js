@@ -5,8 +5,6 @@ import {
   // convertValueStep,
   ifStep,
   loopStep,
-  // mappingGetValueStep,
-  // mappingSetValueStep,
   functionsStep,
   functionsStepEditorProvider,
   rootEditorProvider,
@@ -50,7 +48,7 @@ export function createDesigner(placeholder, walker, definition) {
       root: () => true,
     },
     steps: {
-      iconUrlProvider: () => '/assets/icon-task.svg',
+      iconUrlProvider: (componentType, type) => `/assets/step/${type}.svg`,
       // isDeletable: ({ type }) => type !== 'functions',
       // isDraggable: ({ type }) => type !== 'functions',
     },
@@ -65,8 +63,6 @@ export function createDesigner(placeholder, walker, definition) {
           steps: [
             ifStep,
             loopStep,
-            // mappingGetValueStep,
-            // mappingSetValueStep,
             calculateStep,
             // convertValueStep,
             returnStep,
