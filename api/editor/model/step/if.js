@@ -12,7 +12,18 @@ export const ifStep = {
       type: 'boolean',
       value: 'true',
     },
-    operator: '===',
+    operator: {
+      propertyType: 'string',
+      value: '===',
+      options: {
+        '==': 'equal (==)',
+        '!=': 'unequal (!=)',
+        '>=': 'greater or equal (>=)',
+        '<=': 'less or equal (<=)',
+        '>': 'greater (>)',
+        '<': 'less (<)',
+      },
+    },
     right: {
       propertyType: 'literal',
       type: 'boolean',

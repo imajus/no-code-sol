@@ -5,6 +5,7 @@ import { FunctionsStepResolver } from './step/functions';
 //   mappingGetValueStepResolver,
 //   mappingSetValueStepResolver,
 // } from './step/mapping';
+import { IfStepResolver } from './step/if';
 import { ReturnStepResolver } from './step/return';
 import { VariableStepResolver } from './step/variable';
 
@@ -19,5 +20,6 @@ resolvers.set('argument', ArgumentStepResolver);
 // resolvers.set('mappingGetValue', mappingGetValueStepResolver);
 // resolvers.set('mappingSetValue', mappingSetValueStepResolver);
 resolvers.set('calculate', CalculateStepResolver);
+resolvers.set('if', IfStepResolver);
 resolvers.set('return', ReturnStepResolver);
 resolvers.set('variable', VariableStepResolver);

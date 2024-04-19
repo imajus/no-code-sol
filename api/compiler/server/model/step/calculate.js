@@ -3,7 +3,7 @@ import { AbstractStepResolver } from './abstract';
 export class CalculateStepResolver extends AbstractStepResolver {
   /**
    * @param {CalculateStep} step
-   * @param {FunctionDefinition} parent
+   * @param {FunctionDefinition | Block} parent
    */
   resolve(step, index, parent) {
     const left = this.dynamic(step.properties.left);
@@ -22,6 +22,10 @@ export class CalculateStepResolver extends AbstractStepResolver {
       operation,
     );
     const expression = this.factory.makeExpressionStatement(assignment);
-    parent.vBody.appendChild(expression);
+    if (`vBody` in parent) {
+      parent.vBody.appendChild(expression);
+    } else if (`appendChild` in parent) {
+      parent.appendChild(expression);
+    }
   }
 }

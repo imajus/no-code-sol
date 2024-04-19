@@ -21,6 +21,7 @@ type Identifier = import('solc-typed-ast').Identifier;
 type MemberAccess = import('solc-typed-ast').MemberAccess;
 type IndexAccess = import('solc-typed-ast').IndexAccess;
 type Literal = import('solc-typed-ast').Literal;
+type Block = import('solc-typed-ast').Block;
 
 ///// Common
 
@@ -151,7 +152,7 @@ interface IfStep extends BranchedStep {
   componentType: 'switch';
   properties: {
     left: DynamicValue;
-    operator: string;
+    operator: StringValue;
     right: DynamicValue;
   };
 }
