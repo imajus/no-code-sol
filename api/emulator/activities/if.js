@@ -44,7 +44,7 @@ export const ifActivity = createForkActivity('if', {
     const { left, right, operator } = step.properties;
     const a = $variables.resolve(left);
     const b = $variables.resolve(right);
-    const result = compare(a, b, operator);
+    const result = compare(a, b, operator.value);
     return branchName(result ? 'true' : 'false');
   },
 });
