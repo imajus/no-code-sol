@@ -28,5 +28,35 @@ The target audience is yet unclear, as the tool could be adapted to either more 
 Target audience could defined as one of the following:
 
 - Programmers, who want to debug their Smart Contracts quickly in a browser execution environment
-- Non-programmers, who just want to prototopy their ideas quickly
-- Learners, who want to learn Solidity in a more visal and interactive way
+- Non-programmers, who just want to prototype their ideas quickly
+- Learners, who want to learn Solidity in a more visual and interactive way
+
+## Example Smart Contract
+
+Consider downloading a [dump](.examples/NoCodeSol-2024-04-19T15_43_30.582Z.json) file for importing into **NoCodeSol**.
+
+```sol
+/// SPDX-License-Identifier: GPL-3.0
+pragma solidity >=0.4.16<0.9.0;
+
+contract BasicToken {
+    mapping(address => uint256) public balances;
+
+    function mint(uint256 amount) public {
+        balances[msg.sender] = balances[msg.sender] + amount;
+    }
+
+    function transfer(address recipient, uint256 amount) public {
+        if (balances[msg.sender] >= amount) {
+            balances[msg.sender] = balances[msg.sender] - amount;
+            balances[recipient] = balances[recipient] + amount;
+        } else {}
+    }
+}
+```
+
+Deployed to:
+
+- Morph Testnet: [`0x799f5e246F3F31c9Ec9B36f9CF7f1BdA94d881be`](https://explorer-testnet.morphl2.io/address/0x799f5e246F3F31c9Ec9B36f9CF7f1BdA94d881be)
+- ArbSepolia Testnet: [`0x26f24fd9afbc367cbf0bed364c3fe2b490e0d911`](https://sepolia.arbiscan.io/address/0x26f24fd9afbc367cbf0bed364c3fe2b490e0d911)
+- Gnosis Chiado Testnet: [`0xE320077b267ce495b93dc1b2480c18fd103B6133`](https://gnosis-chiado.blockscout.com/address/0xE320077b267ce495b93dc1b2480c18fd103B6133)
