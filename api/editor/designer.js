@@ -62,7 +62,7 @@ export function createDesigner(placeholder, walker, definition) {
           name: 'Logic',
           steps: [
             ifStep,
-            loopStep,
+            // loopStep,
             calculateStep,
             // convertValueStep,
             returnStep,
