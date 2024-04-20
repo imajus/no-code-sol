@@ -31,6 +31,14 @@ Target audience could defined as one of the following:
 - Non-programmers, who just want to prototype their ideas quickly
 - Learners, who want to learn Solidity in a more visual and interactive way
 
+## How it's made
+
+This project is based on [NoCode JS](https://github.com/nocode-js) framework which provides a model-agnostic UI and execution environment for bootstraping custom No-code tools.
+
+Custom model was created from scratch to support building & emulating Solidity Smart Contracts behavior directly in the browser.
+
+Then, a custom made compiler transforms the sequence of steps to the Solidity AST structure, which is then passed to solc compiler to generate ABI and Bytecode for deploying to the EVM blockchains.
+
 ## Example Smart Contract
 
 Consider downloading a [dump](.examples/NoCodeSol-2024-04-19T15_43_30.582Z.json) file for importing into **NoCodeSol**.
