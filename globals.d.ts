@@ -8,6 +8,11 @@ type WorkflowMachineSnapshot =
   import('sequential-workflow-machine').WorkflowMachineSnapshot;
 type BranchNameResult = import('sequential-workflow-machine').BranchNameResult;
 
+type RootEditorProvider =
+  import('sequential-workflow-designer').RootEditorProvider;
+type StepEditorProvider =
+  import('sequential-workflow-designer').StepEditorProvider;
+
 type SourceUnit = import('solc-typed-ast').SourceUnit;
 type ASTNode = import('solc-typed-ast').ASTNode;
 type SourceUnit = import('solc-typed-ast').SourceUnit;
@@ -30,7 +35,9 @@ type TClass<T = any> = new (...args: any[]) => T;
 ///// Root
 
 interface MyDefinition extends Definition {
-  properties: {};
+  properties: {
+    name: 'string';
+  };
 }
 
 type ValueTypeName =

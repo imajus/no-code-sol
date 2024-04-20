@@ -1,5 +1,9 @@
 <template name="EditorRoot">
-  <div class="px-3">
+  <div class="pt-3 px-3">
+    <div class="form-group">
+      <label>Smart Contract name:</label>
+      <input type="text" value="{{definition.properties.name}}" class="form-control" data-target="name" />
+    </div>
     <h3 class="my-3">Designer actions</h3>
     <button class="btn btn-outline-primary btn-block" data-action="togglePlayground">Toggle playground</button>
     <button class="btn btn-outline-info btn-block" data-action="exportSequence">Export sequence</button>

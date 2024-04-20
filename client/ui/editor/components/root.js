@@ -53,6 +53,10 @@ TemplateController('EditorRoot', {
   onRendered() {},
   helpers: {},
   events: {
+    'change [data-target=name]'(e) {
+      const { onPropertyChanged } = this.data;
+      onPropertyChanged('name', e.target.value.trim());
+    },
     'click [data-action=togglePlayground]'() {
       Session.set('playground', !Session.get('playground'));
     },
@@ -86,7 +90,7 @@ TemplateController('EditorRoot', {
     'click [data-action=resetSequence]'() {
       const definition = new AppStorage('definition');
       const input = new AppStorage('input');
-      definition.reset();
+      definition.set({ properties: { name: 'MyContract' }, sequence: [] });
       input.reset();
       window.location.reload();
     },

@@ -5,7 +5,8 @@
     "paths": {
       "/*": ["./*"]
     },
-    "checkJs": true
+    "checkJs": true,
+    "resolveJsonModule": true
   },
   "exclude": [".meteor", "node_modules", "private", "public"],
   "typeAcquisition": {

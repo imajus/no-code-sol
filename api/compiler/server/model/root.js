@@ -2,6 +2,8 @@ import { ASTNodeFactory, ContractKind } from 'solc-typed-ast';
 
 export const rootResolver = {
   resolve(definition, tree) {
+    const { name } = definition.properties;
+    const filename = `${name}.sol`;
     const factory = new ASTNodeFactory();
     const pragrma = factory.makePragmaDirective([
       'solidity',
@@ -13,7 +15,7 @@ export const rootResolver = {
       '.0',
     ]);
     const contract = factory.makeContractDefinition(
-      'BasicToken',
+      name,
       40, //???
       ContractKind.Contract,
       false,
@@ -26,10 +28,10 @@ export const rootResolver = {
     );
     tree.set(definition.sequence, contract);
     return factory.makeSourceUnit(
-      'BasicToken.sol',
+      filename,
       0,
-      'BasicToken.sol',
-      new Map([['BasicToken', 39]]), //???
+      filename,
+      new Map([[name, 39]]), //???
       [pragrma, contract],
       //FIXME: Make adjustable
       'GPL-3.0',

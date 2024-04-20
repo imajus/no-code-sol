@@ -8,11 +8,13 @@ import { SolidityCompiler } from './sol';
  */
 export class EthereumBytecodeCompiler extends AbstractCompiler {
   async compile(definition) {
+    const { name } = definition.properties;
+    const filename = `${name}.sol`;
     const solidity = new SolidityCompiler();
     const source = await solidity.compile(definition);
     const bytes = new TextEncoder().encode(source);
     const { errors, contracts } = await compile(
-      new Map([['BasicToken.sol', bytes]]),
+      new Map([[filename, bytes]]),
       [],
       '0.8.25',
       [CompilationOutput.EVM_BYTECODE_OBJECT],
@@ -32,6 +34,6 @@ export class EthereumBytecodeCompiler extends AbstractCompiler {
         throw new Error(`${panic.type}: ${panic.message}`);
       }
     }
-    return contracts['BasicToken.sol']['BasicToken'].evm.bytecode.object;
+    return contracts[filename][name].evm.bytecode.object;
   }
 }

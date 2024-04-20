@@ -8,11 +8,13 @@ import { SolidityCompiler } from './sol';
  */
 export class AbstractBinaryInterfaceCompiler extends AbstractCompiler {
   async compile(definition) {
+    const { name } = definition.properties;
+    const filename = `${name}.sol`;
     const solidity = new SolidityCompiler();
     const source = await solidity.compile(definition);
     const bytes = new TextEncoder().encode(source);
     const { errors, contracts } = await compile(
-      new Map([['BasicToken.sol', bytes]]),
+      new Map([[filename, bytes]]),
       [],
       '0.8.25',
       [CompilationOutput.ABI],
@@ -32,6 +34,6 @@ export class AbstractBinaryInterfaceCompiler extends AbstractCompiler {
         throw new Error(`${panic.type}: ${panic.message}`);
       }
     }
-    return JSON.stringify(contracts['BasicToken.sol']['BasicToken'].abi);
+    return JSON.stringify(contracts[filename][name].abi);
   }
 }

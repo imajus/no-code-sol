@@ -10,11 +10,13 @@ export class AbstractSyntaxTreeCompiler extends AbstractCompiler {
   walker = new DefinitionWalker();
 
   async compile(definition) {
+    const { name } = definition.properties;
+    const filename = `${name}.sol`;
     const solidity = new SolidityCompiler();
     const source = await solidity.compile(definition);
     const bytes = new TextEncoder().encode(source);
     const { errors, sources, ...other } = await compile(
-      new Map([['BasicToken.sol', bytes]]),
+      new Map([[filename, bytes]]),
       [],
       '0.8.25',
       [CompilationOutput.AST],

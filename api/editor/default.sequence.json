@@ -1,0 +1,236 @@
+[
+  {
+    "id": "2debc4bcbc228b3f9c22692198bccef7",
+    "type": "variable",
+    "componentType": "task",
+    "name": "mapping(address => uint256) balances",
+    "properties": {
+      "name": "balances",
+      "type": {
+        "propertyType": "type",
+        "value": "mapping(address => uint256)"
+      }
+    }
+  },
+  {
+    "id": "35bfdcce9058650fa01d1f92a865006a",
+    "type": "functions",
+    "componentType": "switch",
+    "name": "Functions",
+    "properties": {},
+    "branches": {
+      "mint": [
+        {
+          "id": "d1d9f1e19e34dda350b4913321f7fec8",
+          "type": "argument",
+          "componentType": "task",
+          "name": "uint256 amount",
+          "properties": {
+            "name": "amount",
+            "type": {
+              "propertyType": "type",
+              "value": "uint256"
+            }
+          }
+        },
+        {
+          "id": "942fbd21a02ef8820e6858f67bd174a5",
+          "type": "calculate",
+          "componentType": "task",
+          "name": "Calculate",
+          "properties": {
+            "left": {
+              "propertyType": "mapping",
+              "name": "balances",
+              "key": {
+                "propertyType": "nested",
+                "path": [
+                  "msg",
+                  "sender"
+                ]
+              }
+            },
+            "operator": {
+              "propertyType": "string",
+              "value": "+",
+              "options": {
+                "+": "addition (+)",
+                "-": "subtraction (-)",
+                "*": "multiplication (*)",
+                "/": "division (/)",
+                "%": "remainder (%)"
+              }
+            },
+            "right": {
+              "propertyType": "variable",
+              "name": "amount"
+            },
+            "result": {
+              "propertyType": "mapping",
+              "name": "balances",
+              "key": {
+                "propertyType": "nested",
+                "path": [
+                  "msg",
+                  "sender"
+                ]
+              }
+            }
+          }
+        }
+      ],
+      "transfer": [
+        {
+          "id": "8ba47bedf361c7394539bb5510298cde",
+          "type": "argument",
+          "componentType": "task",
+          "name": "address recipient",
+          "properties": {
+            "name": "recipient",
+            "type": {
+              "propertyType": "type",
+              "value": "address"
+            }
+          }
+        },
+        {
+          "id": "26e9331aab16cd62ec27adcafe013cf4",
+          "type": "argument",
+          "componentType": "task",
+          "name": "uint256 amount",
+          "properties": {
+            "name": "amount",
+            "type": {
+              "propertyType": "type",
+              "value": "uint256"
+            }
+          }
+        },
+        {
+          "id": "db96e105520c07224cdd9f18d43a259c",
+          "type": "if",
+          "componentType": "switch",
+          "name": "If",
+          "properties": {
+            "left": {
+              "propertyType": "mapping",
+              "name": "balances",
+              "key": {
+                "propertyType": "nested",
+                "path": [
+                  "msg",
+                  "sender"
+                ]
+              }
+            },
+            "operator": {
+              "propertyType": "string",
+              "value": ">=",
+              "options": {
+                "==": "equal (==)",
+                "!=": "unequal (!=)",
+                ">=": "greater or equal (>=)",
+                "<=": "less or equal (<=)",
+                ">": "greater (>)",
+                "<": "less (<)"
+              }
+            },
+            "right": {
+              "propertyType": "variable",
+              "name": "amount"
+            }
+          },
+          "branches": {
+            "true": [
+              {
+                "id": "6f41c2c6891dc7fd47f83365270dbd32",
+                "type": "calculate",
+                "componentType": "task",
+                "name": "Calculate",
+                "properties": {
+                  "left": {
+                    "propertyType": "mapping",
+                    "name": "balances",
+                    "key": {
+                      "propertyType": "nested",
+                      "path": [
+                        "msg",
+                        "sender"
+                      ]
+                    }
+                  },
+                  "operator": {
+                    "propertyType": "string",
+                    "value": "-",
+                    "options": {
+                      "+": "addition (+)",
+                      "-": "subtraction (-)",
+                      "*": "multiplication (*)",
+                      "/": "division (/)",
+                      "%": "remainder (%)"
+                    }
+                  },
+                  "right": {
+                    "propertyType": "variable",
+                    "name": "amount"
+                  },
+                  "result": {
+                    "propertyType": "mapping",
+                    "name": "balances",
+                    "key": {
+                      "propertyType": "nested",
+                      "path": [
+                        "msg",
+                        "sender"
+                      ]
+                    }
+                  }
+                }
+              },
+              {
+                "id": "893f124efea9f4c86a2aa0192693385c",
+                "type": "calculate",
+                "componentType": "task",
+                "name": "Calculate",
+                "properties": {
+                  "left": {
+                    "propertyType": "mapping",
+                    "name": "balances",
+                    "key": {
+                      "propertyType": "variable",
+                      "name": "recipient"
+                    }
+                  },
+                  "operator": {
+                    "propertyType": "string",
+                    "value": "+",
+                    "options": {
+                      "+": "addition (+)",
+                      "-": "subtraction (-)",
+                      "*": "multiplication (*)",
+                      "/": "division (/)",
+                      "%": "remainder (%)"
+                    }
+                  },
+                  "right": {
+                    "propertyType": "variable",
+                    "name": "amount"
+                  },
+                  "result": {
+                    "propertyType": "mapping",
+                    "name": "balances",
+                    "key": {
+                      "propertyType": "variable",
+                      "name": "recipient"
+                    }
+                  }
+                }
+              }
+            ],
+            "false": []
+          }
+        }
+      ]
+    }
+  }
+]

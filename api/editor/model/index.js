@@ -1,4 +1,3 @@
-// export { rootModel } from './root';
 export { logStep } from './step/log';
 export { calculateStep } from './step/calculate';
 export { convertValueStep } from './step/convert';

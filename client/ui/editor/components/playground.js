@@ -49,15 +49,6 @@ function deepEqual(left, right) {
   return JSON.stringify(left) === JSON.stringify(right);
 }
 
-function maybeUpdateArrayItem(arr, callback) {
-  const tmp = (arr ?? []).map(callback);
-  if (!deepEqual(arr, tmp)) {
-    return tmp;
-  }
-  // No change
-  return arr;
-}
-
 TemplateController('EditorPlayground', {
   // props: new SimpleSchema({
   //   'designer': {

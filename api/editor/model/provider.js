@@ -3,12 +3,28 @@ import { Blaze } from 'meteor/blaze';
 import '/client/ui/editor/components/step/default';
 import '/client/ui/editor/components/root';
 
-export function rootEditorProvider(definition) {
+/**
+ * @type {RootEditorProvider}
+ */
+export function rootEditorProvider(definition, context) {
   const root = document.createElement('div');
-  Blaze.renderWithData(Template['EditorRoot'], { definition }, root);
+  Blaze.renderWithData(
+    Template['EditorRoot'],
+    {
+      onPropertyChanged(name, value) {
+        definition.properties[name] = value;
+        context.notifyPropertiesChanged();
+      },
+      definition,
+    },
+    root,
+  );
   return root;
 }
 
+/**
+ * @type {StepEditorProvider}
+ */
 export function defaultStepEditorProvider(step, context) {
   const root = document.createElement('div');
   Blaze.renderWithData(

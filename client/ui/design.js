@@ -1,7 +1,7 @@
 import { DefinitionWalker } from 'sequential-workflow-designer';
 import { Session } from 'meteor/session';
 import { TemplateController } from 'meteor/space:template-controller';
-import { createDesigner } from '/api/editor';
+import { createDesigner, defaultDefinition } from '/api/editor';
 import { AppStorage } from '/api/storage';
 import './editor/components/playground';
 import './design.html';
@@ -17,10 +17,7 @@ TemplateController('Design', {
   },
   onRendered() {
     const storage = new AppStorage('definition');
-    const state = storage.get() ?? {
-      properties: {},
-      sequence: [],
-    };
+    const state = storage.get() ?? defaultDefinition;
     const designer = createDesigner(
       this.find('#designer'),
       this.state.walker,
